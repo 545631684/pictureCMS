@@ -19,7 +19,7 @@ a{ text-decoration:none; color:#333}
 input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
 input,button,textarea,select{*font-size:100%;}
 header,nav,section,article,footer,figure,menu{ margin:0px; padding:0px; display:block}
-body{ width: 100%; min-width: 1440px; margin: auto; background: #FFFFFF;}
+body{ width: 100%; min-width: 1024px; margin: auto; background: #FFFFFF;}
 .clear{clear:both;height:0;font-size:0;line-height:0;visibility:hidden; overflow:hidden;}
 .fl{float: left;}
 .fr{float: right;}

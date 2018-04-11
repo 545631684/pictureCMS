@@ -17,11 +17,6 @@ module.exports = {
         pathRewrite: {
           '^/api': '/'
         }
-//      "/api": {
-//        target: "http://sj.doudouv.com/",
-//        logLevel: 'debug',
-//        changeOrigin: true
-//      }
       }
     },
 

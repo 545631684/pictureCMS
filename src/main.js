@@ -3,8 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import VueParticles from 'vue-particles'
+// import md5 from 'js-md5'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+// let base64 = require('js-base64').Base64
+Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.config.productionTip = false
 // Vue.prototype.URLS = ''
@@ -14,6 +20,7 @@ Vue.prototype.URLS = '/api'
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

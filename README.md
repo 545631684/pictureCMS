@@ -1,7 +1,6 @@
-# pictureCMS
-展示图片后台
+# picture_cms
 
-> 545631684@qq.com
+> A Vue.js project
 
 ## Build Setup
 

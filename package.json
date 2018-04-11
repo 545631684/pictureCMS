@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "element-ui": "^2.3.3",
     "fastclick": "^1.0.6",
+    "js-base64": "^2.4.3",
+    "js-md5": "^0.7.3",
     "qs": "^6.5.1",
     "vue": "^2.5.2",
     "vue-localstorage": "^0.5.0",
