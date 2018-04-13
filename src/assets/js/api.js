@@ -66,3 +66,59 @@ export function interfaceAddUser (_this) {
       console.log(error)
     })
 }
+
+// login.vue 接口  注册
+export function interfaceAddUser (_this) {
+  Axios.post(_this.URLS + '/useradd', qs.stringify({userName: _this.userNameAdd, Password: _this.passwordAdd, Verification: _this.verification}))
+    .then(function (response) {
+      console.log(response.data)
+      if (response.data.msg === '0') {
+        _this.userNameTxt2 = '用户名或密码错误'
+        _this.passwordTxt2 = '用户名或密码错误'
+      } else if (response.data.msg === '2') {
+        _this.verificationTxt = '验证码错误'
+      } else if (response.data.msg === '3') {
+        _this.userNameTxt2 = '已被注册'
+      } else if (response.data.msg === '4') {
+        alert('注册成功！')
+        _this.tab('dl')
+      } else if (response.data.msg === '5') {
+        alert('注册失败，请重新注册！')
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageUploadImg.vue 接口 删除上传临时文件
+export function deleteTemporaryFile (_this, imgSrc) {
+  Axios.post(_this.URLS + '/index.php/Home/Index/delfile', qs.stringify({filesrc: imgSrc}))
+    .then(function (response) {
+      console.log(response.data)
+      if (response.data.msg === '0') {
+        console.log('删除成功')
+      } else if (response.data.msg === '1') {
+        console.log('删除失败')
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageUploadImg.vue 接口 用户上传发布图片信息
+export function addImgsFile (_this) {
+  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionAdd', qs.stringify({uId: _this.$store.state.user.uId, title: _this.title, imgsrc: _this.imgCrsString}))
+    .then(function (response) {
+      console.log(response.data)
+      if (response.data.msg === '0') {
+        console.log('发布成功')
+      } else if (response.data.msg === '1') {
+        console.log('发布失败')
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}

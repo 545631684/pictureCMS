@@ -1,39 +1,35 @@
 <template>
     <el-container width="100%" :height="winHeight">
       <el-header>
-        <dl>
-          <dd>
-            <img src="../assets/images/1.png" alt="" width="52" height="46"/>
-            <h1>图片上传展示后台</h1>
-          </dd>
-          <dd>
-            <p>用户名：XXXX <a href="">退出登陆</a></p>
-          </dd>
-        </dl>
+        <BackstageHeader></BackstageHeader>
       </el-header>
       <el-container>
         <el-aside style="min-height: 943px !important">
           <div class="clear"></div>
           <img src="../assets/images/3.png" alt="" width="91" height="91" />
-          <h2>name</h2>
+          <h2>{{name}}</h2>
           <dl>
             <dt>图片管理</dt>
-            <dd>上传图片</dd>
-            <dd>查看图片</dd>
-            <dd>修改图片</dd>
+            <dd :class="{on:navs.uploadImg}" v-on:click.stop="navSwitch('uploadImg')">上传图片</dd>
+            <dd :class="{on:navs.modifyImg}" v-on:click.stop="navSwitch('modifyImg')">修改图片</dd>
+            <dd :class="{on:navs.seeImg}" v-on:click.stop="navSwitch('seeImg')">查看图片</dd>
           </dl>
           <dl>
             <dt>统计图表</dt>
-            <dd>查看统计图</dd>
+            <dd :class="{on:navs.rightIndex}" v-on:click.stop="navSwitch('rightIndex')">查看统计图</dd>
           </dl>
           <dl>
             <dt>用户管理</dt>
-            <dd>新增/修改用户</dd>
-            <dd>用户列表</dd>
+            <dd >修改个人信息</dd>
+            <dd >修改密码</dd>
+            <dd >用户列表</dd>
           </dl>
         </el-aside>
-        <el-main>
-          <uploadImg></uploadImg>
+        <el-main direction="vertical">
+          <UploadImg v-if="navs.uploadImg"></UploadImg>
+          <BackstageRightIndex v-if="navs.rightIndex"></BackstageRightIndex>
+          <BackstageModifyImg v-if="navs.modifyImg"></BackstageModifyImg>
+          <BackstageSeeImg v-if="navs.seeImg"></BackstageSeeImg>
         </el-main>
       </el-container>
     </el-container>
@@ -41,11 +37,33 @@
 
 <script>
 import UploadImg from '../components/backstageUploadImg'
+import BackstageRightIndex from '../components/backstageRightIndex'
+import BackstageModifyImg from '../components/backstageModifyImg'
+import BackstageSeeImg from '../components/backstageSeeImg'
+import BackstageHeader from '../components/backstageHeader'
 export default {
   name: 'backstageIndex',
   data () {
     return {
-      winHeight: 0
+      winHeight: 0,
+      name: this.$store.state.user.nickname || this.$store.state.user.userName,
+      navs: {
+        uploadImg: false,
+        seeImg: false,
+        modifyImg: false,
+        rightIndex: true
+      }
+    }
+  },
+  methods: {
+    cancellation () { // 注销
+      console.log(111)
+    },
+    navSwitch (type) {
+      type === 'uploadImg' ? this.navs.uploadImg = true : this.navs.uploadImg = false
+      type === 'seeImg' ? this.navs.seeImg = true : this.navs.seeImg = false
+      type === 'modifyImg' ? this.navs.modifyImg = true : this.navs.modifyImg = false
+      type === 'rightIndex' ? this.navs.rightIndex = true : this.navs.rightIndex = false
     }
   },
   created () {
@@ -54,22 +72,17 @@ export default {
     }
   },
   components: {
-    UploadImg
+    UploadImg,
+    BackstageRightIndex,
+    BackstageModifyImg,
+    BackstageSeeImg,
+    BackstageHeader
   }
 }
 </script>
 
 <style>
   .el-container{overflow: hidden;}
-  .el-header{width: 100% !important; height: 81px !important; background: url(../assets/images/2.jpg) no-repeat; background-size: 100% 81px !important;}
-  .el-header dl{}
-  .el-header dl dd{display: block;  width: 50%;height: 81px;}
-  .el-header dl dd:nth-child(1){float: left;}
-  .el-header dl dd:nth-child(1) img{margin: 17px 26px 18px 18px; display: block;float: left;}
-  .el-header dl dd:nth-child(1) h1{color: #ffffff;display: block;float: left; font-size: 25px; padding: 24px 0;}
-  .el-header dl dd:nth-child(2){float: right;}
-  .el-header dl dd:nth-child(2) p{height: 40px;font-family: MicrosoftYaHei;font-size: 16px;font-weight: normal;font-stretch: normal;line-height: 40px;letter-spacing: 2px;color: #10a696;    margin:35px 15px auto; text-align: right;}
-  .el-header dl dd:nth-child(2) p a{width: 70px;height: 19px; font-size:12px; background-color: #02ae9d; color: #FFFFFF; text-align: center;    padding: 3px 8px; border-radius: 50px;    margin-left: 20px;}
   .el-aside{width: 20% !important; height: 100%;  background: url(../assets/images/4.jpg); background-size: 100% 943px; }
   .el-aside img{display: block; padding: 4px; background: #04695e;box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.52); border-radius: 50px;    margin: 14px auto;}
   .el-aside h2{text-align: center; height:20px;font-family: MicrosoftYaHei;font-size: 18px;font-weight: normal;font-stretch: normal;line-height: 20px;letter-spacing: 2px;color: #ffffff;}
