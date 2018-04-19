@@ -5,11 +5,11 @@ import App from './App'
 import router from './router'
 import store from './store'
 import VueParticles from 'vue-particles'
-// import md5 from 'js-md5'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueLocalStorage from 'vue-localstorage'
 
-// let base64 = require('js-base64').Base64
+Vue.use(VueLocalStorage)
 Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.config.productionTip = false

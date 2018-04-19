@@ -70,6 +70,9 @@ export default {
     if (window.innerHeight) {
       this.winHeight = window.innerHeight
     }
+    this.$store.dispatch('getLocalStorage', this.$store)
+    this.name = this.$store.state.user.nickname || this.$store.state.user.userName
+    console.log(this.$store.state.user.nickname + '///' + this.$store.state.user.userName)
   },
   components: {
     UploadImg,

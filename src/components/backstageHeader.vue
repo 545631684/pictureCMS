@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { deleteTemporaryFile, addImgsFile } from '../assets/js/api'
+import { cancellationUser } from '../assets/js/api'
 export default {
   name: 'BackstageHeader',
   data () {
@@ -21,8 +21,7 @@ export default {
   },
   methods: {
     cancellation () {
-      
-      console.log(111)
+      cancellationUser(this)
     }
   }
 }

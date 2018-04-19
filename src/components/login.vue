@@ -19,7 +19,7 @@
           <dd>
             <a href="">忘记密码?</a>
           </dd>
-          <dd><!--<label :class="{click:setPasswordStyle}" @click="setPassword()"><span><i></i></span>记住密码</label>--></dd>
+          <dd><label :class="{click:setPasswordStyle}" @click="setPassword()"><span><i></i></span>记住密码</label></dd>
           <dd><button class="Button" type="submit" @click="login()">登录</button></dd>
         </dl>
         <dl v-show="!register">
@@ -93,7 +93,7 @@ export default {
     setPassword () {
       this.setPasswordStyle ? this.setPasswordStyle = false : this.setPasswordStyle = true
       console.log(this.setPasswordStyle + '记住密码')
-      this.$store.commit('setUsername', {uId: this.$store.state.user.uId, userName: this.$store.state.user.userName, Password: this.$store.state.user.Password, nickname: this.$store.state.user.nickname, state: this.$store.state.user.status, HeadPortraitSrc: this.$store.state.user.HeadPortraitSrc, setPasswordStyle: this.setPasswordStyle})
+      // this.$store.commit('setUsername', {uId: this.$store.state.user.uId, userName: this.$store.state.user.userName, Password: this.$store.state.user.Password, nickname: this.$store.state.user.nickname, state: this.$store.state.user.status, HeadPortraitSrc: this.$store.state.user.HeadPortraitSrc, setPasswordStyle: this.setPasswordStyle})
       // this.$store.dispatch('setLocalStorage', _this.$store.state)
     },
     addUser () {
