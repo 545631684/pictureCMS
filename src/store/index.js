@@ -34,12 +34,12 @@ export default new Vuex.Store({
     cancellation (state) { // 注销
       state.user = {
         uId: '',
-        userName: '',
-        Password: '',
+        userName: state.user.setPasswordStyle ? state.user.userName : '',
+        Password: state.user.setPasswordStyle ? state.user.Password : '',
         nickname: '',
         state: '',
         HeadPortraitSrc: '',
-        setPasswordStyle: false,
+        setPasswordStyle: state.user.setPasswordStyle,
         types: [],
         projects: []
       }
@@ -58,11 +58,11 @@ export default new Vuex.Store({
       Vue.localStorage.set('saiqisetPasswordStyle', user.state.user.setPasswordStyle)
       Vue.localStorage.set('saiqiseTtypes', JSON.stringify(user.state.user.types))
       Vue.localStorage.set('saiqiseProjects', JSON.stringify(user.state.user.projects))
-      console.log(user.state.user.types)
-      console.log(Vue.localStorage.get('saiqiuserName') + '存储成功')
+      // console.log(user.state.user.types)
+      // console.log(Vue.localStorage.get('saiqiuserName') + '存储成功')
     },
     getLocalStorage (store) { // 获取本地存储的用户对象
-      console.log(Vue.localStorage.get('saiqiuserName') + '获取本地存储变量:用户名称')
+      // console.log(Vue.localStorage.get('saiqiuserName') + '获取本地存储变量:用户名称')
       store.state.user.uId = Vue.localStorage.get('saiqiuId')
       store.state.user.userName = Vue.localStorage.get('saiqiuserName')
       store.state.user.Password = Vue.localStorage.get('saiqiPassword')

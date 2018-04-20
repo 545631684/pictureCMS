@@ -147,7 +147,7 @@ export default {
           projectId = this.projects[i].pid
         }
       }
-      console.log(this.imgCrsString)
+      console.log(this.imgCrsString + ':发布前')
       if (this.title.length !== 0) {
         if (this.projectImg.length !== 0) {
           if (this.typeImg.length !== 0) {

@@ -30,3 +30,8 @@ body{ width: 100%; min-width: 1024px; margin: auto; background: #FFFFFF;}
 #swt {cursor: pointer;}
 .blank{ width:1000px; height:10px; margin:auto;}
 .blank20{ width:1000px; height:20px; margin:auto;}
+.omit{text-overflow:ellipsis; overflow:hidden; white-space:nowrap;}
+.omit2{display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;}
+.omit3{display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;overflow: hidden;}
+.omit4{display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow: hidden;}
+.omit5{display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 5;overflow: hidden;}

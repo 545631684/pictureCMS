@@ -11,7 +11,7 @@
           <dl>
             <dt>图片管理</dt>
             <dd :class="{on:navs.uploadImg}" v-on:click.stop="navSwitch('uploadImg')">上传图片</dd>
-            <dd :class="{on:navs.modifyImg}" v-on:click.stop="navSwitch('modifyImg')">修改图片</dd>
+            <!--<dd :class="{on:navs.modifyImg}" v-on:click.stop="navSwitch('modifyImg')">修改图片</dd>-->
             <dd :class="{on:navs.seeImg}" v-on:click.stop="navSwitch('seeImg')">查看图片</dd>
           </dl>
           <dl>
@@ -25,11 +25,11 @@
             <dd >用户列表</dd>
           </dl>
         </el-aside>
-        <el-main direction="vertical">
+        <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;">
           <UploadImg v-if="navs.uploadImg"></UploadImg>
           <BackstageRightIndex v-if="navs.rightIndex"></BackstageRightIndex>
-          <BackstageModifyImg v-if="navs.modifyImg"></BackstageModifyImg>
-          <BackstageSeeImg v-if="navs.seeImg"></BackstageSeeImg>
+          <BackstageModifyImg v-if="navs.modifyImg" :navs="navs"></BackstageModifyImg>
+          <BackstageSeeImg v-if="navs.seeImg" :navs="navs"></BackstageSeeImg>
         </el-main>
       </el-container>
     </el-container>
@@ -92,4 +92,5 @@ export default {
   .el-aside dl{width: 100%; height:auto;padding: 20px 0 0;}
   .el-aside dl dt{height: 45px; line-height: 35px; text-align: left; text-indent: 8%; color: #FFFFFF; font-size: 25px; background: url(../assets/images/5.png) no-repeat; background-position: left bottom; background-size: 100% 2px;}
   .el-aside dl dd{text-align: left; text-indent: 18%;font-size: 16px;color: #FFFFFF;line-height: 40px;}
+  .el-aside dl dd.on{ background: url(../assets/images/6.png) right center no-repeat; background-size: 21px 25px;}
 </style>

@@ -92,9 +92,6 @@ export default {
     },
     setPassword () {
       this.setPasswordStyle ? this.setPasswordStyle = false : this.setPasswordStyle = true
-      console.log(this.setPasswordStyle + '记住密码')
-      // this.$store.commit('setUsername', {uId: this.$store.state.user.uId, userName: this.$store.state.user.userName, Password: this.$store.state.user.Password, nickname: this.$store.state.user.nickname, state: this.$store.state.user.status, HeadPortraitSrc: this.$store.state.user.HeadPortraitSrc, setPasswordStyle: this.setPasswordStyle})
-      // this.$store.dispatch('setLocalStorage', _this.$store.state)
     },
     addUser () {
       if (this.userNameAdd.length === 0) {
@@ -169,12 +166,16 @@ export default {
     }
   },
   created () {
-    /* this.$store.dispatch('getLocalStorage', this.$store.state.user)
-    if (this.$store.state.user.setPasswordStyle) {
+    this.$store.dispatch('getLocalStorage', this.$store.state.user)
+    if (this.$store.state.user.setPasswordStyle === 'true') {
       this.userName = this.$store.state.user.userName
-      this.password = this.$base64.decode(this.$store.state.user.Password)
+      this.password = this.$store.state.user.Password
+      this.setPasswordStyle = true
+    } else {
+      this.userName = ''
+      this.password = ''
+      this.setPasswordStyle = false
     }
-    console.log(this.$store.state.user) */
   }
 }
 </script>

@@ -5,7 +5,7 @@ import qs from 'qs'
 export function loginLand (_this) {
   Axios.post(_this.URLS + '/index.php/Home/Login/login.html', qs.stringify({userName: _this.userName, Password: _this.password}))
     .then(function (response) {
-      console.log(typeof response.data)
+      console.log(response.data.msg)
       if (response.data.msg === '0') {
         // 给全局变量赋值
         let user = {
