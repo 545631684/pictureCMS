@@ -20,16 +20,17 @@
           </dl>
           <dl>
             <dt>用户管理</dt>
-            <dd >修改个人信息</dd>
+            <dd :class="{on:navs.userInfo}" v-on:click.stop="navSwitch('userInfo')">个人信息</dd>
             <dd >修改密码</dd>
             <dd >用户列表</dd>
           </dl>
         </el-aside>
-        <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;">
+        <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;overflow-x:hidden">
           <UploadImg v-if="navs.uploadImg"></UploadImg>
           <BackstageRightIndex v-if="navs.rightIndex"></BackstageRightIndex>
           <BackstageModifyImg v-if="navs.modifyImg" :navs="navs"></BackstageModifyImg>
           <BackstageSeeImg v-if="navs.seeImg" :navs="navs"></BackstageSeeImg>
+          <BackstageUserInfoModify v-if="navs.userInfo" :navs="navs"></BackstageUserInfoModify>
         </el-main>
       </el-container>
     </el-container>
@@ -41,6 +42,7 @@ import BackstageRightIndex from '../components/backstageRightIndex'
 import BackstageModifyImg from '../components/backstageModifyImg'
 import BackstageSeeImg from '../components/backstageSeeImg'
 import BackstageHeader from '../components/backstageHeader'
+import BackstageUserInfoModify from '../components/backstageUserInfoModify'
 export default {
   name: 'backstageIndex',
   data () {
@@ -51,6 +53,7 @@ export default {
         uploadImg: false,
         seeImg: false,
         modifyImg: false,
+        userInfo: false,
         rightIndex: true
       }
     }
@@ -64,6 +67,7 @@ export default {
       type === 'seeImg' ? this.navs.seeImg = true : this.navs.seeImg = false
       type === 'modifyImg' ? this.navs.modifyImg = true : this.navs.modifyImg = false
       type === 'rightIndex' ? this.navs.rightIndex = true : this.navs.rightIndex = false
+      type === 'userInfo' ? this.navs.userInfo = true : this.navs.userInfo = false
     }
   },
   created () {
@@ -79,7 +83,8 @@ export default {
     BackstageRightIndex,
     BackstageModifyImg,
     BackstageSeeImg,
-    BackstageHeader
+    BackstageHeader,
+    BackstageUserInfoModify
   }
 }
 </script>

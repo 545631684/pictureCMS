@@ -1,8 +1,8 @@
 <template>
   <el-container>
-    <el-footer>
-      <el-input placeholder="请输入搜索内容" v-model="searchTXT" clearable style="width:400px;"></el-input>
-      <el-select v-model="projectImg" placeholder="项目" clearable style="width:200px; color: #409eff;margin-left: 20px;">
+    <el-footer class="clearfix" style="height:auto">
+      <el-input class="ma10" placeholder="请输入搜索内容" v-model="searchTXT" clearable style="width:400px;"></el-input>
+      <el-select class="ma10" v-model="projectImg" placeholder="项目" clearable style="width:200px; color: #409eff;margin-left: 20px;">
         <el-option
           v-for="item in projects"
           :key="item.pid"
@@ -10,7 +10,7 @@
           :value="item.name">
         </el-option>
       </el-select>
-      <el-select v-model="typeImg" placeholder="项目下小分类" clearable style="width:200px;margin-left: 20px; color: #409eff;">
+      <el-select class="ma10" v-model="typeImg" placeholder="项目下小分类" clearable style="width:200px;margin-left: 20px; color: #409eff;">
         <el-option
           v-for="item in types"
           :key="item.tid"
@@ -18,8 +18,8 @@
           :value="item.name">
         </el-option>
       </el-select>
-      <el-button type="primary" style="margin-left: 20px;">查询</el-button>
-      <el-button type="primary" style="margin-left: 20px;" v-on:click.stop="navSwitch('uploadImg')">上传图片</el-button>
+      <el-button class="ma10" type="primary" style="margin-left: 20px;">查询</el-button>
+      <el-button class="ma10" type="primary" style="margin-left: 20px;" v-on:click.stop="navSwitch('uploadImg')">上传图片</el-button>
     </el-footer>
     <el-footer style="height: auto; margin-bottom: 50px;">
       <dl class="articleList clearfix">
@@ -394,6 +394,7 @@ export default {
 </script>
 
 <style>
+  .ma10{margin-bottom: 10px;}
   .el-input--suffix{width: 200px !important;}
   .articleList{}
   .articleList dd{width: 340px; height: 382px;-moz-box-shadow:0px 0px 20px #034B43; -webkit-box-shadow:0px 0px 20px #034B43; box-shadow:0px 0px 20px #034B43;border-radius: 1em; float: left; margin: 10px 10px 50px;}
