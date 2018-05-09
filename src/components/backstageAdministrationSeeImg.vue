@@ -2,6 +2,14 @@
   <el-container>
     <el-footer class="clearfix" style="height:auto">
       <el-input class="ma10" placeholder="请输入搜索内容" v-model="searchTXT" clearable style="width:400px;"></el-input>
+      <el-select class="ma10" v-model="userName" placeholder="用户" clearable style="width:200px; color: #409eff;margin-left: 20px;">
+        <el-option
+          v-for="item in userList"
+          :key="item.uId"
+          :label="item.nickname"
+          :value="item.nickname">
+        </el-option>
+      </el-select>
       <el-select class="ma10" v-model="projectImg" placeholder="项目" clearable style="width:200px; color: #409eff;margin-left: 20px;">
         <el-option
           v-for="item in projects"
@@ -54,10 +62,10 @@
 
 <script>
 import { formatDate } from '../assets/js/publicAPI'
-import { currentUserArticleAll, userArticleQuery, delArticle } from '../assets/js/api'
+import { administrationArticleAll, administrationArticleQuery, delArticle, userList2 } from '../assets/js/api'
 export default {
   props: ['navs'],
-  name: 'backstageSeeImg',
+  name: 'backstageAdministrationSeeImg',
   data () {
     return {
       loading: true,
@@ -65,17 +73,25 @@ export default {
       projects: this.$store.state.user.projects,
       typeImg: '',
       projectImg: '',
+      userName: '',
       searchTXT: '',
       article: [],
-      prompt: ''
+      prompt: '',
+      userList: []
     }
   },
   methods: {
     navSwitch (type) {
       type === 'uploadImg' ? this.navs.uploadImg = true : this.navs.uploadImg = false
       type === 'seeImg' ? this.navs.seeImg = true : this.navs.seeImg = false
+      type === 'seeImg2' ? this.navs.seeImg2 = true : this.navs.seeImg2 = false
       type === 'modifyImg' ? this.navs.modifyImg = true : this.navs.modifyImg = false
       type === 'rightIndex' ? this.navs.rightIndex = true : this.navs.rightIndex = false
+      type === 'userInfo' ? this.navs.userInfo = true : this.navs.userInfo = false
+      type === 'userPwd' ? this.navs.userPwd = true : this.navs.userPwd = false
+      type === 'userList' ? this.navs.userList = true : this.navs.userList = false
+      type === 'userRecovery' ? this.navs.userRecovery = true : this.navs.userRecovery = false
+      type === 'projectType' ? this.navs.projectType = true : this.navs.projectType = false
     },
     deleteArticle (mid) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -97,7 +113,7 @@ export default {
       this.navSwitch('modifyImg')
     },
     queryArticle () {
-      userArticleQuery(this)
+      administrationArticleQuery(this)
     },
     returnSrc (src) {
       return this.URLS + src
@@ -114,7 +130,8 @@ export default {
   created () {
     this.types = this.$store.state.user.types
     this.projects = this.$store.state.user.projects
-    currentUserArticleAll(this)
+    administrationArticleAll(this)
+    userList2(this)
   }
 }
 </script>

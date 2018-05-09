@@ -10,24 +10,27 @@
           <el-option
             v-for="item in projects"
             :key="item.pid"
-            :label="item.name"
-            :value="item.name">
+            :label="item.xname"
+            :value="item.xname">
           </el-option>
         </el-select>
         <el-select v-model="typeImg" placeholder="请选择项目下小分类" clearable style="width:200px;margin-left: 50px; color: #409eff;">
           <el-option
             v-for="item in types"
             :key="item.tid"
-            :label="item.name"
-            :value="item.name">
+            :label="item.lname"
+            :value="item.lname">
           </el-option>
         </el-select>
       </div>
     </el-footer>
+    <el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
+      <div class="title" ><span>描述：</span><el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="describe"></el-input></div>
+    </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
       <p class="imgName" >图片：</p>
       <div class="imgs">
-        <el-upload
+        <!--<el-upload
           ref="fliesImg"
           accept=".jpg,.png,.gif"
           :action="action"
@@ -40,7 +43,17 @@
         </el-upload>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
+        </el-dialog>-->
+        <ul class="el-upload-list el-upload-list--picture-card">
+          <li tabindex="0" class="el-upload-list__item is-success" v-for="(item, index) in article.img" :key="index">
+            <img :src="'http://img.doudouv.com/' + item" alt="" class="el-upload-list__item-thumbnail">
+            <a class="el-upload-list__item-name"><i class="el-icon-document"></i>13-1F51QS039532.jpg</a>
+            <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-check"></i></label>
+            <i class="el-icon-close"></i><i class="el-icon-close-tip">按 delete 键可删除</i>
+            <span class="el-upload-list__item-actions"><span class="el-upload-list__item-preview"><i class="el-icon-zoom-in"></i></span>
+            <span class="el-upload-list__item-delete"><i class="el-icon-delete"></i></span></span>
+          </li>
+        </ul>
       </div>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
@@ -86,12 +99,14 @@
 </template>
 
 <script>
-import { deleteTemporaryFile, addImgsFile } from '../assets/js/api'
+import { deleteTemporaryFile, addImgsFile, exhibitionDetails } from '../assets/js/api'
 export default {
+  props: ['navs'],
   name: 'backstageModifyImg',
   data () {
     return {
       title: '',
+      describe: '',
       dialogImageUrl: '',
       dialogVisible: false,
       imgCrss: [],
@@ -100,7 +115,8 @@ export default {
       types: this.$store.state.user.types,
       projects: this.$store.state.user.projects,
       typeImg: '',
-      projectImg: ''
+      projectImg: '',
+      article: []
     }
   },
   methods: {
@@ -168,8 +184,9 @@ export default {
     }
   },
   created () {
-    this.types = JSON.parse(this.$store.state.user.types)
-    this.projects = JSON.parse(this.$store.state.user.projects)
+    this.types = this.$store.state.user.types
+    this.projects = this.$store.state.user.projects
+    exhibitionDetails(this, this.$store.state.mId)
   }
 }
 </script>
@@ -177,9 +194,40 @@ export default {
 <style>
   .title{ width: 100%;}
   .title span{display: block;float: left;width: 10%; font-size: 18px; height: 40px; line-height: 40px; text-align: right;    padding-right: 20px;}
-  .title .el-input{float: left;width: 30%;}
+  .title span.true{display: block;float: left;color: #1afa29; width: 250px; line-height: 40px; text-align: left;}
+  .title span.true img{display: block; float: left;padding-right: 10px; width: 30px; height: 30px; margin:5px 0px 5px 10px;}
+  .title span.fales{display: block;float: left;color: #d81e06; width: 250px; line-height: 40px; text-align: left;}
+  .title span.fales img{display: block; float: left;padding-right: 10px; width: 30px; height: 30px; margin:5px 0px 5px 10px;}
+  .title .el-input, .title .el-textarea{float: left;width: 30%;}
   .imgName{float: left;height: 40px;font-size: 18px;text-align: right;width: 10%;padding-right: 20px; }
   .imgs{width: 55%;float: left;}
   .buttonImg{width: 30%;margin-left: 13%;}
   .el-input--suffix{width: 200px !important;}
+  .avatar-uploader{width: 178px;height: 178px;}
+  .uploadImg .el-upload{border-radius: 6px !important;}
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 148px;
+    height: 148px;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

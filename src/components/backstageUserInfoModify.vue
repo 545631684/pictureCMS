@@ -1,16 +1,16 @@
 <template>
   <el-container>
     <div class="userInfo" v-show="info">
-      <img class="headPortrait" :src="user.HeadPortraitSrc" alt="" v-if="user.HeadPortraitSrc"/>
-      <img class="headPortrait" src="/static/img/3.65c3442.png" alt="" v-else/>
+      <img class="headPortrait" :src="this.URLS + user.HeadPortraitSrc" alt="" v-if="user.HeadPortraitSrc !== 'null'"/>
+      <img class="headPortrait" src="../assets/images/touxiang.jpg" alt="" v-else/>
       <p class="nick">{{user.nickname}}</p>
       <p><span>用户名/邮箱</span><span>{{user.userName}}</span></p>
       <p><span style="text-align: center;">性别</span><span v-if="user.sex === '1'">男</span><span v-if="user.sex === '0'">女</span></p>
-      <p><span>用户创建时间</span><span>{{user.registerTime}}</span></p>
-      <p><span>最后登陆时间</span><span>{{user.endTime}}</span></p>
-      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="modifyInfo('infoModify')">修改个人信息</el-button>
+      <p><span>用户创建时间</span><span>{{formatDate(user.registerTime)}}</span></p>
+      <p><span>最后登陆时间</span><span>{{formatDate(user.endTime)}}</span></p>
+      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="tab('infoModify')">修改个人信息</el-button>
     </div>
-    <div class="userInfo" v-show="infoModify">
+    <div class="userInfo" v-if="infoModify">
       <div class="headPortrait">
         <el-upload
           class="avatar-uploader"
@@ -19,7 +19,7 @@
           :on-change="obtainImgSrc"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
-          <img v-if="HeadPortraitSrc" :src="HeadPortraitSrc" class="avatar">
+          <img v-if="user.HeadPortraitSrc !== 'null'" :src="this.URLS + user.HeadPortraitSrc" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </div>
@@ -50,42 +50,48 @@
           <el-radio v-model="user.sex" label="0">女</el-radio>
         </el-main>
       </el-container>
-      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="modifyInfo('info')">保存个人信息</el-button>
+      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="modifyInfo()">保存个人信息</el-button>
     </div>
   </el-container>
 </template>
 
 <script>
+import { formatDate } from '../assets/js/publicAPI'
+import { modifyUserInfo } from '../assets/js/api'
 export default {
   name: 'backstageUserInfoModify',
   data () {
     return {
       user: {
-        uId: '1',
-        userName: '545631684@qq.com',
-        nickname: '郑勇宏',
-        HeadPortraitSrc: '',
-        sex: '1',
-        registerTime: '2018/04/22 16:18:56',
-        endTime: '2018/04/22 16:18:56'
+        uId: this.$store.state.user.uId,
+        userName: this.$store.state.user.userName,
+        nickname: this.$store.state.user.nickname,
+        HeadPortraitSrc: this.$store.state.user.HeadPortraitSrc,
+        sex: this.$store.state.user.sex,
+        registerTime: this.$store.state.user.registerTime,
+        endTime: this.$store.state.user.endTime
       },
-      HeadPortraitSrc: '',
       action: this.URLS + '/upfile',
       info: true,
       infoModify: false
     }
   },
   methods: {
-    modifyInfo (type) {
+    modifyInfo () {
+      if (this.user.nickname.length === 0) {
+        this.$alert('请填写昵称', '警告', {confirmButtonText: '确定'})
+      } else {
+        modifyUserInfo(this)
+      }
+    },
+    tab (type) {
       type === 'info' ? this.info = true : this.info = false
       type === 'infoModify' ? this.infoModify = true : this.infoModify = false
     },
     obtainImgSrc (file, fileList) { // 获取上传图片的服务器端实际路径地址并保存到数组中
-      console.log(fileList)
       if (file.response !== undefined) {
-        if (this.user.HeadPortraitSrc.length === 0) {
-          this.user.HeadPortraitSrc = file.response.imgsrc
-          this.HeadPortraitSrc = file.url
+        if (this.user.HeadPortraitSrc.length !== 'null') {
+          this.user.HeadPortraitSrc = file.response.dataheadImg
         }
       }
     },
@@ -103,6 +109,14 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
+    },
+    formatDate (time) { // 时间戳转换
+      if (time !== null) {
+        let date = new Date(parseInt(time) * 1000)
+        return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+      } else {
+        return '暂无'
+      }
     }
   }
 }
@@ -119,8 +133,9 @@ export default {
   .inputInfo{width: 385px; height: 40px; line-height: 40px; margin: auto auto 20px;}
   .inputInfo .el-aside{background: none; width: 90px !important; height: auto;}
   .inputInfo .el-main{padding: 0;}
+  .userInfo .el-upload{border-radius: 500px !important;}
   .avatar-uploader .el-upload {
-    border: 2px dashed #d9d9d9;
+    border: 1px dashed #d9d9d9;
     border-radius: 500px;
     cursor: pointer;
     position: relative;

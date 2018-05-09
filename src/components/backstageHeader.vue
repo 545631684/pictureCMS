@@ -5,7 +5,7 @@
       <h1>图片上传展示后台</h1>
     </dd>
     <dd>
-      <p>用户名：{{name}} <a v-on:click.stop="cancellation">退出登陆</a></p>
+      <p>用户名：{{name}} <a v-on:click.stop="cancellation" style="cursor: pointer;">退出登陆</a></p>
     </dd>
   </dl>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: 'BackstageHeader',
   data () {
     return {
-      name: this.$store.state.user.nickname || this.$store.state.user.userName
+      name: this.$store.state.user.nickname === 'null' ? this.$store.state.user.userName : this.$store.state.user.nickname
     }
   },
   methods: {

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '@/store/index'
 import Router from 'vue-router'
 import Index from '@/components/index'
 import Login from '@/components/login'
@@ -21,7 +22,19 @@ export default new Router({
     {// 后台首页
       path: '/backstage',
       name: 'backstage',
-      component: BackstageIndex
+      component: BackstageIndex,
+      beforeEnter: (to, from, next) => {
+        store.dispatch('getLocalStorage', store.state) // 获取本地存储全局用户状态
+        if (store.state.user.userName !== '' || store.state.userName.length !== null) {
+          if (store.state.user.state === '1') {
+            next()
+          } else {
+            next('/login')
+          }
+        } else {
+          next('/login')
+        }
+      }
     }
   ]
 })

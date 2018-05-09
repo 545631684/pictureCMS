@@ -13,17 +13,21 @@
             <p>{{userNameTxt}}</p>
           </dd>
           <dd>
-            <input type="password" placeholder="请输入密码" name="" id="" v-model="password" />
+            <input type="password" placeholder="请输入密码" name="" id="" v-model="password" @keyup.enter="login"/>
             <p>{{passwordTxt}}</p>
           </dd>
           <dd>
-            <a href="">忘记密码?</a>
+            <a href="/manual.html">用户手册</a>
           </dd>
-          <dd><label :class="{click:setPasswordStyle}" @click="setPassword()"><span><i></i></span>记住密码</label></dd>
+          <dd>
+            <!--<label :class="{click:setPasswordStyle}" @click="setPassword()"><span><i></i></span>记住密码</label>-->
+            <el-checkbox v-model="setPasswordStyle" style="float: left;">记住密码</el-checkbox>
+          </dd>
           <dd><button class="Button" type="submit" @click="login()">登录</button></dd>
         </dl>
         <dl v-show="!register">
-          <dd style="margin-top: 76px;"><input type="text" placeholder="请输入邮箱/用户名" name="" id="" v-model="userNameAdd" />
+          <dd style="margin-top: 76px;">
+            <input type="text" placeholder="请输入邮箱/用户名" name="" id="" v-model="userNameAdd" @blur="judgeUserName"/>
             <p>{{userNameTxt2}}</p>
           </dd>
           <dd>
@@ -31,7 +35,7 @@
             <p>{{passwordTxt2}}</p>
           </dd>
           <dd>
-            <input type="password" placeholder="二次输入密码" name="" id="" v-model="password2" />
+            <input type="password" placeholder="二次输入密码" name="" id="" v-model="password2" @blur="mima"/>
             <p>{{password2Txt}}</p>
           </dd>
           <dd class="dd01">
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-import { loginLand, mailboxVerification, interfaceAddUser } from '../assets/js/api'
+import { loginLand, mailboxVerification, interfaceAddUser, judgeName } from '../assets/js/api'
 export default {
   name: 'login',
   data () {
@@ -68,7 +72,8 @@ export default {
       verificationInnHtml: '获取验证码',
       setPasswordStyle: this.$store.state.user.setPasswordStyle,
       land: false,
-      register: true
+      register: true,
+      aa: ''
     }
   },
   methods: {
@@ -141,6 +146,10 @@ export default {
         this.userNameTxt2 = '请输入邮箱'
       } else if (!(/^[A-Za-z0-9/\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.userNameAdd))) {
         this.userNameTxt2 = '您输入的邮箱有误，请重新输入'
+      } else if (this.verificationInnHtml !== '获取验证码') {
+        this.$alert('请不要重复点击', '警告', {confirmButtonText: '确定'})
+      } else if (this.userNameTxt2 === '账号已被注册') {
+        this.$alert('账号已被注册，请重新填写', '警告', {confirmButtonText: '确定'})
       } else {
         this.userNameTxt2 = ' '
         mailboxVerification(this)
@@ -148,21 +157,36 @@ export default {
     },
     countdown (wait) {
       var _this = this
-      var aa = {}
-      aa = setInterval(function () {
-        _this.$refs.verification.style.background = '#e7e7eb'
-        _this.$refs.verification.style.color = '#a6aec1'
-        _this.$refs.verification.style.border = '1px solid #dbdbe1'
-        _this.verificationInnHtml = '重新发送(' + wait + ')'
-        wait--
-        if (wait === 0) {
-          _this.$refs.verification.style.background = '#00b09d'
+      _this.aa = {}
+      _this.aa = setInterval(function () {
+        if (wait < 0) {
+          _this.$refs.verification.style.background = '#409EFF'
           _this.$refs.verification.style.color = '#FFFFFF'
           _this.$refs.verification.style.border = 'none'
           _this.verificationInnHtml = '获取验证码'
-          window.clearInterval(aa)
+          window.clearInterval(_this.aa)
+        } else {
+          _this.$refs.verification.style.background = '#e7e7eb'
+          _this.$refs.verification.style.color = '#a6aec1'
+          _this.$refs.verification.style.border = '1px solid #dbdbe1'
+          _this.verificationInnHtml = '重新发送(' + wait + ')'
+          wait--
         }
       }, 1000)
+    },
+    judgeUserName () {
+      if (!(/^[A-Za-z0-9/\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.userNameAdd))) {
+        this.userNameTxt2 = '您输入的邮箱有误，请重新输入'
+      } else {
+        judgeName(this)
+      }
+    },
+    mima () {
+      if (this.password2 !== this.passwordAdd) {
+        this.password2Txt = '两次输入密码不一致'
+      } else {
+        this.password2Txt = ''
+      }
     }
   },
   created () {
@@ -176,6 +200,10 @@ export default {
       this.password = ''
       this.setPasswordStyle = false
     }
+  },
+  beforeDestroy () {
+    window.clearInterval(this.aa)
+    this.aa = null
   }
 }
 </script>
@@ -270,7 +298,7 @@ export default {
     height: 60px;
     color: #a3b2b1;
   }
-  .login_center dl dd span {
+  /*.login_center dl dd span {
     border-radius: 50px;
     border: 2px solid #a3b2b1;
     display: block;
@@ -288,8 +316,8 @@ export default {
     height: 4px;
     margin: 1px auto;
     transition: all .5s;
-  }
-  .login_center dl dd label {
+  }*/
+  /* .login_center dl dd label {
     display: block;
     float: left;
     height: 20px;
@@ -301,7 +329,7 @@ export default {
   .login_center dl dd .click span i {
     border-color: #2bb28a;
     transition: all 1s;
-  }
+  } */
   .login_center dl dd button.Button {
     display: block;
     width: 260px;
