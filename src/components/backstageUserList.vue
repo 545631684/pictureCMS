@@ -1,8 +1,8 @@
 <template>
-  <el-table v-loading="loading" :data="userList" style="width: 100%" >
+  <el-table v-loading="loading" :data="userList" style="width: 100% !important;" >
     <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
     <el-table-column prop="userName" label="用户名" width="180" align="center"></el-table-column>
-    <el-table-column prop="nickname" label="昵称" align="center" width="180"></el-table-column>
+    <el-table-column prop="nickname" label="昵称" align="center" width="80"></el-table-column>
     <el-table-column prop="registerTime" label="创建时间" align="center" width="160"></el-table-column>
     <el-table-column prop="endTime" label="最后登陆" align="center" width="160"></el-table-column>
     <el-table-column prop="permissions" label="权限" align="center" width="160">
@@ -12,7 +12,7 @@
     </el-table-column>
     <el-table-column label="操作" align="center" width="500">
       <template slot-scope="scope">
-        <el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">修改密码</el-button>
+        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改密码</el-button>
         <el-dialog
           title="修改用户密码"
           :visible.sync="centerDialogVisible"
@@ -27,9 +27,9 @@
             <el-button type="primary" @click="updatePwd">确 定</el-button>
           </span>
         </el-dialog>
-        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除用户</el-button>
-        <el-button v-if="scope.row.permissions === '1'" :disabled="scope.row.permissions === '1' ? false : true" type="warning" size="mini" @click="uploadPermissions(scope.$index, scope.row, '2')">提升为超级管理员</el-button>
-        <el-button v-if="scope.row.permissions === '2'" :disabled="scope.row.permissions === '2' ? false : true" type="success" size="mini" @click="uploadPermissions(scope.$index, scope.row, '1')">降级为普通管理员</el-button>
+        <el-button size="mini" type="danger" plain @click="handleDelete(scope.$index, scope.row)">删除用户</el-button>
+        <el-button v-if="scope.row.permissions === '1'" :disabled="scope.row.permissions === '1' ? false : true" type="primary" plain size="mini" @click="uploadPermissions(scope.$index, scope.row, '2')">提升为超级管理员</el-button>
+        <el-button v-if="scope.row.permissions === '2'" :disabled="scope.row.permissions === '2' ? false : true" type="success" plain size="mini" @click="uploadPermissions(scope.$index, scope.row, '1')">降级为普通管理员</el-button>
       </template>
     </el-table-column>
   </el-table>

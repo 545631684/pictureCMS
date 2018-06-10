@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { loginLand, mailboxVerification, interfaceAddUser, judgeName } from '../assets/js/api'
+import { loginLand, mailboxVerification2, interfaceAddUser, judgeName } from '../assets/js/api'
 export default {
   name: 'login',
   data () {
@@ -152,10 +152,11 @@ export default {
         this.$alert('账号已被注册，请重新填写', '警告', {confirmButtonText: '确定'})
       } else {
         this.userNameTxt2 = ' '
-        mailboxVerification(this)
+        mailboxVerification2(this)
       }
     },
     countdown (wait) {
+      this.judgeUserName()
       var _this = this
       _this.aa = {}
       _this.aa = setInterval(function () {

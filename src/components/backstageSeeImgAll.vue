@@ -55,8 +55,8 @@
           <p class="articleButton">
             <span class="omit2">{{item.title}}</span>
             <span class="">
-              <a v-on:click.stop="modifyArticle(item.mId)">更改</a>
-              <a v-on:click.stop="deleteArticle(item.mId)">删除</a>
+              <!--<a v-on:click.stop="modifyArticle(item.mId)">更改</a>-->
+              <!--<a v-on:click.stop="deleteArticle(item.mId)">删除</a>-->
               <router-link tag="a" class="" :to="'/article/backstage/all/' + item.mId">查看</router-link>
             </span>
           </p>
@@ -72,7 +72,7 @@ import { formatDate } from '../assets/js/publicAPI'
 import { administrationArticleAll, administrationArticleQuery, delArticle2, userList2 } from '../assets/js/api'
 export default {
   props: ['navs'],
-  name: 'backstageAdministrationSeeImg',
+  name: 'backstageSeeImgAll',
   data () {
     return {
       loading: true,

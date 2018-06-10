@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import store from '@/store/index'
 import Router from 'vue-router'
-import Index from '@/components/index'
+import Index from '@/components/webIndex'
+import VideoList from '@/components/videoList'
+import PsdList from '@/components/psdList'
+import ImgList from '@/components/imgList'
+import Article from '@/components/article'
 import Login from '@/components/login'
 import BackstageIndex from '@/components/backstageIndex'
 
@@ -13,6 +17,26 @@ export default new Router({
       path: '/',
       name: 'index',
       component: Index
+    },
+    {// 图片集列表页
+      path: '/listImgAll',
+      name: 'listImg',
+      component: ImgList
+    },
+    {// psd列表页
+      path: '/listPsdAll',
+      name: 'listPsd',
+      component: PsdList
+    },
+    {// 视频列表页
+      path: '/listVideoAll/',
+      name: 'listVideo',
+      component: VideoList
+    },
+    {// 文章页
+      path: '/article/:navPname/:nacType/:id',
+      name: 'article',
+      component: Article
     },
     {// 登陆
       path: '/login',
@@ -33,7 +57,7 @@ export default new Router({
           }
         } else {
           next('/login')
-        }
+        } 
       }
     }
   ]

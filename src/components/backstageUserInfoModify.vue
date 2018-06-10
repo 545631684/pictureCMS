@@ -8,7 +8,7 @@
       <p><span style="text-align: center;">性别</span><span v-if="user.sex === '1'">男</span><span v-if="user.sex === '0'">女</span></p>
       <p><span>用户创建时间</span><span>{{formatDate(user.registerTime)}}</span></p>
       <p><span>最后登陆时间</span><span>{{formatDate(user.endTime)}}</span></p>
-      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="tab('infoModify')">修改个人信息</el-button>
+      <el-button type="primary" style="margin: auto;display: block;" v-on:click.stop="tab('infoModify')">修改个人信息</el-button>
     </div>
     <div class="userInfo" v-if="infoModify">
       <div class="headPortrait">
@@ -50,7 +50,7 @@
           <el-radio v-model="user.sex" label="0">女</el-radio>
         </el-main>
       </el-container>
-      <el-button type="warning" style="margin: auto;display: block;" v-on:click.stop="modifyInfo()">保存个人信息</el-button>
+      <el-button type="primary" style="margin: auto;display: block;" v-on:click.stop="modifyInfo()">保存个人信息</el-button>
     </div>
   </el-container>
 </template>
@@ -71,7 +71,7 @@ export default {
         registerTime: this.$store.state.user.registerTime,
         endTime: this.$store.state.user.endTime
       },
-      action: this.URLS + '/upfile',
+      action: this.URLS + '/index.php/Home/Index/upfile',
       info: true,
       infoModify: false
     }
@@ -147,9 +147,9 @@ export default {
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 150px;
-    height: 150px;
-    line-height: 150px;
+    width: 150px !important;
+    height: 150px !important;
+    line-height: 150px !important;
     text-align: center;
   }
   .avatar {

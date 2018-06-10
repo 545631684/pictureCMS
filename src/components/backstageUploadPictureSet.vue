@@ -37,8 +37,8 @@
       <div class="imgs">
         <el-upload
           :limit="1000"
-          ref="fliesImg"
           :multiple="true"
+          ref="fliesImg"
           accept=".jpg,.png,.gif"
           :action="action + '?id=1'"
           list-type="picture-card"
@@ -53,55 +53,6 @@
         </el-dialog>
       </div>
     </el-footer>
-    <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
-      <p class="imgName" >PSD：</p>
-      <div class="imgs" style="width: 20%;">
-        <el-upload
-          style="margin-top: 0px;"
-          ref="psdFile"
-          :limit="10"
-          accept=".psd"
-          class="upload-demo"
-          :action="action + '?id=4'"
-          :on-remove="handleRemove2"
-          :on-change="obtainImgSrc">
-          <el-button size="small" type="primary">点击上传psd文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传psd文件，文件大小不要超过1GB</div>
-        </el-upload>
-      </div>
-    </el-footer>
-    <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
-      <p class="imgName" >视频：</p>
-      <div class="imgs" style="width: 20%;">
-        <el-upload
-          class="avatar-uploader uploadImg"
-          ref="videoImg"
-          accept=".jpg,.png"
-          :action="action + '?id=5'"
-          :show-file-list="false"
-          :on-preview="handlePictureCardPreview"
-          :on-success="handleAvatarSuccess2"
-          :before-upload="beforeAvatarUpload2"
-          :on-change="obtainImgSrc">
-          <img v-if="videoImageUrlls" :src="videoImageUrlls" class="avatar">
-          <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传视频缩略图（.jpg）</div>
-        </el-upload>
-      </div>
-      <div class="imgs" style="width: 20%;">
-        <el-upload
-          style="margin-top: 44px;"
-          :limit="1"
-          ref="videoFile"
-          accept=".mp4,.flv"
-          class="upload-demo"
-          :action="action + '?id=6'"
-          :on-remove="handleRemove3"
-          :on-change="obtainImgSrc">
-          <el-button size="small" type="primary">点击上传视频文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传视频格式文件，文件大小不要超过1GB<br />建议上传格式：.mp4、.flv （支持在线播放）</div>
-        </el-upload>
-      </div>
-    </el-footer>
     <el-row class="buttonImg">
       <el-button type="primary" v-on:click.stop="submitImg" :loading="loading">提交上传</el-button>
     </el-row>
@@ -109,9 +60,9 @@
 </template>
 
 <script>
-import { deleteTemporaryFile, addImgsFile, queryTitle, deleteTemporaryFile2 } from '../assets/js/api'
+import { deleteTemporaryFile, addImgsFile3, queryTitle } from '../assets/js/api'
 export default {
-  name: 'UploadImg',
+  name: 'BackstageUploadPictureSet',
   props: ['navs'],
   data () {
     return {
@@ -123,13 +74,8 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       imgCrss: [],
-      psd: {
-        psdFile: []
-      },
-      video: {
-        videoImg: {size: '', name: '', url: '', type: '', File: {}},
-        videoFile: []
-      },
+      psd: 'f',
+      video: 'f',
       imgCrsString: '',
       action: this.URLS + '/index.php/Home/Index/upfile',
       types: this.$store.state.user.types,
@@ -138,12 +84,16 @@ export default {
       projectImg: '',
       psdImageUrlls: '',
       videoImageUrlls: '',
-      release: false,
-      uploadFiles: []
+      release: false
     }
   },
   methods: {
     navSwitch (type) {
+      if (this.$store.state.user.permissions === '1') {
+        type = 'seeImg'
+      } else if (this.$store.state.user.permissions === '2') {
+        type = 'seeImg2'
+      }
       type === 'uploadImg' ? this.navs.uploadImg = true : this.navs.uploadImg = false
       type === 'uploadImg2' ? this.navs.uploadImg2 = true : this.navs.uploadImg2 = false
       type === 'seeImg' ? this.navs.seeImg = true : this.navs.seeImg = false
@@ -171,7 +121,6 @@ export default {
             }
           }
           if (srcBoolean) {
-            // console.log('生成地址' + URL.createObjectURL(file.raw))
             this.imgCrss[this.imgCrss.length] = {
               size: file.size,
               name: file.name,
@@ -179,125 +128,31 @@ export default {
               type: file.raw.type,
               File: file.raw
             }
-            this.uploadFiles[this.uploadFiles.length] = file.response.dataImg
           }
+        } else if (file.response.type === '3') {
+          this.psd.psdImg = file.response.dataPsdImg
         } else if (file.response.type === '4') {
-          this.psd.psdFile[this.psd.psdFile.length] = {
-            size: file.size,
-            name: file.name,
-            url: file.response.dataPsd,
-            type: 'image/x-photoshop',
-            File: file.raw
-          }
-          this.uploadFiles[this.uploadFiles.length] = file.response.dataPsd
+          this.psd.psdFile = file.response.dataPsd
         } else if (file.response.type === '5') {
-          this.video.videoImg = {
-            size: file.size,
-            name: file.name,
-            url: file.response.dataVideoImg,
-            type: file.raw.type,
-            File: file.raw
-          }
-          this.uploadFiles[this.uploadFiles.length] = file.response.dataVideoImg
+          this.video.videoImg = file.response.dataVideoImg
         } else if (file.response.type === '6') {
-          console.log(file)
-          this.video.videoFile[this.video.videoFile.length] = {
-            size: file.size,
-            name: file.name,
-            url: file.response.dataVideo,
-            type: file.raw.type,
-            File: file.raw
-          }
-          this.uploadFiles[this.uploadFiles.length] = file.response.dataVideo
+          this.video.videoFile = file.response.dataVideo
         }
       }
     },
     handleRemove (file, fileList) { // 删除上传的图片
-      console.log(file.response.dataImg)
       deleteTemporaryFile(this, file.response.dataImg)
-      this.setuploadFiles(file.response.dataImg)
-      this.deleteFiles(file.response.dataImg, 'img')
-    },
-    handleRemove2 (file, fileList) { // 删除上传的psd文件
-      console.log(file.response.dataPsd)
-      deleteTemporaryFile(this, file.response.dataPsd)
-      this.setuploadFiles(file.response.dataPsd)
-      this.deleteFiles(file.response.dataPsd, 'psdFile')
-    },
-    handleRemove3 (file, fileList) { // 删除上传的Video文件
-      console.log(file.response.dataVideo)
-      deleteTemporaryFile(this, file.response.dataVideo)
-      this.setuploadFiles(file.response.dataVideo)
-      this.deleteFiles(file.response.dataVideo, 'videoFile')
     },
     handlePictureCardPreview (file) { // 查看上传的图片
       this.dialogImageUrl = file.url
       this.dialogVisible = true
     },
-    setuploadFiles (src) {
-      let num = []
-      for (let i = 0; i < this.uploadFiles.length; i++) {
-        this.uploadFiles[i] = this.uploadFiles[i] === src ? '' : this.uploadFiles[i]
-      }
-      for (let i = 0; i < this.uploadFiles.length; i++) {
-        if (this.uploadFiles[i].length !== 0) {
-          num[i] = this.uploadFiles[i]
-        }
-      }
-      this.uploadFiles = num
-      num = []
-    },
-    deleteFiles (src, type) {
-      let num = []
-      if (type === 'img') {
-        for (let i = 0; i < this.imgCrss.length; i++) {
-          this.imgCrss[i] = this.imgCrss[i].url === src ? '' : this.imgCrss[i]
-        }
-        for (let i = 0; i < this.imgCrss.length; i++) {
-          if (this.imgCrss[i].length !== 0) {
-            num[i] = this.imgCrss[i]
-          }
-        }
-        this.imgCrss = num
-      } else if (type === 'psdFile') {
-        for (let i = 0; i < this.psd.psdFile.length; i++) {
-          this.psd.psdFile[i] = this.psd.psdFile[i].url === src ? '' : this.psd.psdFile[i]
-        }
-        for (let i = 0; i < this.psd.psdFile.length; i++) {
-          if (this.psd.psdFile[i].length !== 0) {
-            num[i] = this.psd.psdFile[i]
-          }
-        }
-        this.psd.psdFile = num
-      } else if (type === 'videoFile') {
-        for (let i = 0; i < this.video.videoFile.length; i++) {
-          this.video.videoFile[i] = this.video.videoFile[i].url === src ? '' : this.video.videoFile[i]
-        }
-        for (let i = 0; i < this.video.videoFile.length; i++) {
-          if (this.video.videoFile[i].length !== 0) {
-            num[i] = this.video.videoFile[i]
-          }
-        }
-        this.video.videoFile = num
-      }
-      num = []
-    },
     submitImg () { // 发布用户文章，把数组中的路径拼接成字符串,以及Uid、title发送给后台接口
       let typeId = ''
       let projectId = ''
       for (let i = 0; this.imgCrss.length > i; i++) {
-        this.imgCrsString += this.imgCrss[i].url + ','
+        this.imgCrsString += this.imgCrss[i] + ','
       }
-      for (let i = 0; this.psd.psdFile.length > i; i++) {
-        this.imgCrsString += this.psd.psdFile[i].url + ','
-      }
-      if (this.video.videoImg.url.length !== 0) {
-        this.imgCrsString += this.video.videoImg.url + ','
-      }
-      if (this.video.videoFile.length !== 0) {
-        this.imgCrsString += this.video.videoFile[0].url + ','
-      }
-      
       for (let i = 0; this.types.length > i; i++) {
         if (this.typeImg === this.types[i].lname) {
           typeId = this.types[i].tid
@@ -319,20 +174,12 @@ export default {
         this.$alert('请选择项目下的小类别', '警告', {confirmButtonText: '确定'})
       } else if (this.describe.length === 0) {
         this.$alert('请填写描述内容', '警告', {confirmButtonText: '确定'})
-      } else if (this.imgCrsString.length === 0 && this.psd.psdFile.length === 0 && this.video.videoImg.url.length === 0 && this.video.videoFile.length === 0) {
-        this.$alert('请添加需要上传的图片/PSD/视频文件', '警告', {confirmButtonText: '确定'})
-      } else if (this.psd.psdFile.length !== 0 && this.imgCrsString.length === 0) {
-        this.$alert('请添加psd缩略图，在图片里添加', '警告', {confirmButtonText: '确定'})
-      } else if (this.video.videoImg.url.length !== 0 && this.video.videoFile.length === 0) {
-        this.$alert('请完整添加视频文件和缩略图', '警告', {confirmButtonText: '确定'})
-      } else if (this.video.videoImg.url.length === 0 && this.video.videoFile.length !== 0) {
-        this.$alert('请完整添加视频文件和缩略图', '警告', {confirmButtonText: '确定'})
+      } else if (this.imgCrsString.length === 0) {
+        this.$alert('请添加需要上传的图片', '警告', {confirmButtonText: '确定'})
       } else {
         console.log('tid:' + typeId + 'pid:' + projectId)
         this.loading = true
-        this.psd = this.psd.psdFile.length !== 0 ? this.psd : 'f'
-        this.video = this.video.videoFile.length !== 0 && this.video.videoImg.url.length !== 0 ? this.video : 'f'
-        addImgsFile(this, typeId, projectId, this.psd, this.video, this.describe)
+        addImgsFile3(this, typeId, projectId, this.psd, this.video, this.describe)
       }
     },
     handleAvatarSuccess (res, file) {

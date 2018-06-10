@@ -22,8 +22,39 @@ export function formatDate (date, fmt) {
 }
 
 /**
+ * 返回文件的大小（单位：MB）
+ * */
+export function fileSize (size) {
+  size = (file.size/1024*100)/100
+  return size.toFixed(1)
+}
+
+/**
+ * 生成防查看路径链接地址
+ * */
+export function fileUrl (file) {
+  return URL.createObjectURL(file)
+}
+
+/**
  * 给单数1~9前添加0，以表示正常时间格式
  * */
 function padLeftZero (str) {
   return ('00' + str).substr(str.length)
 }
+
+/**
+ * 返回顶部
+ * */
+function returnTop () {
+  // 获取当前最外围document的scrollTop，返回顶部
+  var timer = setInterval(function() {
+    var top = document.body.scrollTop || document.documentElement.scrollTop
+    var speed = Math.ceil(top / 5)
+    document.body.scrollTop = document.documentElement.scrollTop = top - speed
+    if (top === 0) {
+      clearInterval(timer)
+    }
+  }, 20)
+}
+

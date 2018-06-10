@@ -25,14 +25,18 @@
         <el-table-column prop="xname" label="项目名称" width="100" align="center"></el-table-column>
         <el-table-column prop="state" label="项目状态" width="100" align="center">
           <template scope="scope">
-            <span v-bind:style="{color: (scope.row.state === '启用' ? '#67c23a' : '#FF0000')}">{{ scope.row.state }}</span>
+            <span v-bind:style="{color: (scope.row.state === true ? '#13ce66' : '#ff4949')}">{{ typeHTML(scope.row.state) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
-            <el-button size="mini" type="danger" @click="handleProhibit(scope.$index, scope.row, '1')">禁用</el-button>
-            <el-button size="mini" type="success" @click="handleFiring(scope.$index, scope.row, '1')">启用</el-button>
-            <el-button size="mini" type="warning" @click="firing(scope.row, '1')">修改</el-button>
+            <el-switch
+              @change="handleProhibit(scope.$index, scope.row, scope.row.state)"
+              v-model="scope.row.state"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+            <el-button size="mini" type="primary" plain @click="firing(scope.row, '1')" style="margin-left: 20px;">修改</el-button>
             <el-dialog
               :title="title"
               :visible.sync="centerDialogVisibleP"
@@ -54,14 +58,18 @@
         <el-table-column prop="lname" label="类型名称" width="100" align="center"></el-table-column>
         <el-table-column prop="state" label="类型状态" width="100" align="center">
           <template scope="scope">
-            <span v-bind:style="{color: (scope.row.state === '启用' ? '#67c23a' : '#FF0000')}">{{ scope.row.state }}</span>
+            <span v-bind:style="{color: (scope.row.state === true ? '#13ce66' : '#ff4949')}">{{ typeHTML(scope.row.state) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
-            <el-button size="mini" type="danger" @click="handleProhibit(scope.$index, scope.row, '2')">禁用</el-button>
-            <el-button size="mini" type="success" @click="handleFiring(scope.$index, scope.row, '2')">启用</el-button>
-            <el-button size="mini" type="warning" @click="firing(scope.row, '2')">修改</el-button>
+            <el-switch
+              @change="handleFiring(scope.$index, scope.row, scope.row.state)"
+              v-model="scope.row.state"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+            <el-button size="mini" type="primary" plain @click="firing(scope.row, '2')" style="margin-left: 20px;">修改</el-button>
             <el-dialog
               :title="title"
               :visible.sync="centerDialogVisibleT"
@@ -102,44 +110,24 @@ export default {
     }
   },
   methods: {
+    typeHTML (state) {
+      return state === true ? '启用' : '禁用'
+    },
     handleProhibit (index, row, id) {
-      // console.log(index, row)
-      let _this = this
-      this.$confirm('确定要禁用, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (id === '1') {
-          projectDisable(_this, row.pid)
-        } else if (id === '2') {
-          typeDisable(_this, row.tid)
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
+      console.log(index, row)
+      if (id === false) {
+        projectDisable(this, row.pid)
+      } else if (id === true) {
+        projectEnable(this, row.pid)
+      }
     },
     handleFiring (index, row, id) {
       // console.log(index, row)
-      this.$confirm('确定要启用, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (id === '1') {
-          projectEnable(this, row.pid)
-        } else if (id === '2') {
-          typeEnable(this, row.tid)
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
+      if (id === false) {
+        typeDisable(this, row.tid)
+      } else if (id === true) {
+        typeEnable(this, row.tid)
+      }
     },
     handleUpdate (index, row, id) {
       console.log(this.row)

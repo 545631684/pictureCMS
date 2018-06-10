@@ -5,7 +5,7 @@
       <h1>图片上传展示后台</h1>
     </dd>
     <dd>
-      <p>用户名：{{name}} <a v-on:click.stop="cancellation" style="cursor: pointer;">退出登陆</a></p>
+      <p>用户名：{{name}} <a href="/" style="cursor: pointer;">返回前台</a><a v-on:click.stop="cancellation" style="cursor: pointer;">退出登陆</a></p>
     </dd>
   </dl>
 </template>

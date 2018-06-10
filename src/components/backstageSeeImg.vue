@@ -24,13 +24,20 @@
     <el-footer style="height: auto; margin-bottom: 50px;">
       <dl v-loading="loading" class="articleList clearfix" v-if="article.lenght !== 0">
         <dd v-for="(item, index) in article" :key="item.mId">
+          <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 0">
+            <img src="http://192.168.0.108/image/timg.jpg" width="340" height="234"/>
+          </p>
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 1">
             <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234"/>
           </p>
           <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 2">
             <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index"/>
           </p>
-          <p class="shrinkageImg clearfix" v-else-if="item.srcs.length > 2">
+          <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 3">
+            <img :src="returnSrc(item.srcs[0])" />
+            <img :src="returnSrc(item.srcs[1])" />
+          </p>
+          <p class="shrinkageImg clearfix" v-else-if="item.srcs.length === 4">
             <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index"/>
           </p>
           <p class="articleTime">
@@ -42,7 +49,7 @@
             <span class="">
               <a v-on:click.stop="modifyArticle(item.mId)">更改</a>
               <a v-on:click.stop="deleteArticle(item.mId)">删除</a>
-              <a>查看</a>
+              <router-link tag="a" class="" :to="'/article/backstage/all/' + item.mId">查看</router-link>
             </span>
           </p>
         </dd>
@@ -73,12 +80,22 @@ export default {
   methods: {
     navSwitch (type) {
       type === 'uploadImg' ? this.navs.uploadImg = true : this.navs.uploadImg = false
+      type === 'uploadImg2' ? this.navs.uploadImg2 = true : this.navs.uploadImg2 = false
       type === 'seeImg' ? this.navs.seeImg = true : this.navs.seeImg = false
+      type === 'seeImg2' ? this.navs.seeImg2 = true : this.navs.seeImg2 = false
+      type === 'seeImg3' ? this.navs.seeImg3 = true : this.navs.seeImg3 = false
+      type === 'recoverySeeImg' ? this.navs.recoverySeeImg = true : this.navs.recoverySeeImg = false
       type === 'modifyImg' ? this.navs.modifyImg = true : this.navs.modifyImg = false
       type === 'rightIndex' ? this.navs.rightIndex = true : this.navs.rightIndex = false
+      type === 'userInfo' ? this.navs.userInfo = true : this.navs.userInfo = false
+      type === 'userPwd' ? this.navs.userPwd = true : this.navs.userPwd = false
+      type === 'userList' ? this.navs.userList = true : this.navs.userList = false
+      type === 'userAdd' ? this.navs.userAdd = true : this.navs.userAdd = false
+      type === 'userRecovery' ? this.navs.userRecovery = true : this.navs.userRecovery = false
+      type === 'projectType' ? this.navs.projectType = true : this.navs.projectType = false
     },
     deleteArticle (mid) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该文件到回收站, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -135,16 +152,16 @@ export default {
   .articleList dd .shrinkageImg img:nth-child(3){border-radius: 0  0 0 1em;}
   .articleList dd .shrinkageImg img:nth-child(4){border-radius: 0  0 1em 0;}
   .articleList dd .articleTime{width:100%;height: 60px;line-height: 60px;    padding: 10px 0;}
-  .articleList dd .articleTime span{display: block;float: left;height: 60px; width: 50%;color: #2f6d66;}
+  .articleList dd .articleTime span{display: block;float: left;height: 60px; width: 40%;color: #2f6d66;}
   .articleList dd .articleTime span:nth-child(1){font-weight: bold; font-size: 40px;  text-indent: .5em; line-height: 60px;}
-  .articleList dd .articleTime span:nth-child(2){ text-align: right; line-height: 30px;width: 45%;padding-right: 5%;    font-size: 12px;}
+  .articleList dd .articleTime span:nth-child(2){ text-align: right; line-height: 30px;width: 55%;padding-right: 5%;    font-size: 12px;}
   .articleList dd .articleButton{width:100%;height: 70px;}
   .articleList dd .articleButton span{display: block;float: left;height: 70px; width: 50%;color: #2f6d66;}
   .articleList dd .articleButton span:nth-child(1){font-weight: bold; font-size: 16px; text-align: justify; width: 46%; line-height:24px;    padding: 0 2%;}
   .articleList dd .articleButton span:nth-child(2){ text-align: right; line-height: 30px;}
   .articleList dd .articleButton span:nth-child(2) a{display: block; float: left; width: 33%; text-align: center; color: #FFFFFF; margin-top: 40px; cursor: pointer;}
   .articleList dd .articleButton span:nth-child(2) a:nth-child(1){background: #00bca8;border-radius:  1em 0 0 0;}
-  .articleList dd .articleButton span:nth-child(2) a:nth-child(2){background: #e60012;}
-  .articleList dd .articleButton span:nth-child(2) a:nth-child(3){width: 34%; background: #00e620; border-radius: 0 0 1em 0;}
+  .articleList dd .articleButton span:nth-child(2) a:nth-child(2){background: #f56c6c;}
+  .articleList dd .articleButton span:nth-child(2) a:nth-child(3){width: 34%; background: #67c23a; border-radius: 0 0 1em 0;}
   .prompt{height: 100px;text-align: center;line-height: 100px;font-size: 20px;}
 </style>

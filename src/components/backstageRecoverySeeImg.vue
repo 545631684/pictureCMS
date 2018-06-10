@@ -2,7 +2,7 @@
   <el-container>
     <el-footer class="clearfix" style="height:auto">
       <el-input class="ma10" placeholder="请输入搜索内容" v-model="searchTXT" clearable style="width:400px;"></el-input>
-      <el-select class="ma10" v-model="userName" placeholder="用户" clearable style="width:200px; color: #409eff;margin-left: 20px;">
+      <el-select v-if="permissions === '2'" class="ma10" v-model="userName" placeholder="用户" clearable style="width:200px; color: #409eff;margin-left: 20px;">
         <el-option
           v-for="item in userList"
           :key="item.uId"
@@ -33,31 +33,29 @@
       <dl v-loading="loading" class="articleList clearfix" v-if="article.lenght !== 0">
         <dd v-for="(item, index) in article" :key="item.mId">
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 0">
-            <img src="http://192.168.0.108/image/timg.jpg" width="340" height="234" id="000"/>
+            <img src="http://192.168.0.108/image/timg.jpg" width="340" height="234"/>
           </p>
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 1">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234" id="111"/>
+            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234"/>
           </p>
           <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 2">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="222"/>
+            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index"/>
           </p>
           <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 3">
-            <img :src="returnSrc(item.srcs[0])"  id="333"/>
+            <img :src="returnSrc(item.srcs[0])" />
             <img :src="returnSrc(item.srcs[1])" />
           </p>
           <p class="shrinkageImg clearfix" v-else-if="item.srcs.length === 4">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="444"/>
+            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index"/>
           </p>
           <p class="articleTime">
             <span>{{item.mId}}</span>
             <span>发布：{{formatDate(item.registerTimeImg)}}<br />最后修改：{{formatDate(item.endTimeImg)}}</span>
           </p>
-          <p class="articleButton">
+          <p class="articleButton2">
             <span class="omit2">{{item.title}}</span>
             <span class="">
-              <a v-on:click.stop="modifyArticle(item.mId)">更改</a>
-              <a v-on:click.stop="deleteArticle(item.mId)">删除</a>
-              <router-link tag="a" class="" :to="'/article/backstage/all/' + item.mId">查看</router-link>
+              <a v-on:click.stop="reduction(item.mId)">还原</a>
             </span>
           </p>
         </dd>
@@ -69,13 +67,14 @@
 
 <script>
 import { formatDate } from '../assets/js/publicAPI'
-import { administrationArticleAll, administrationArticleQuery, delArticle2, userList2 } from '../assets/js/api'
+import { recoveryArticleAll, administrationArticleQuery, delArticle2, userList2, reductionInterface } from '../assets/js/api'
 export default {
   props: ['navs'],
-  name: 'backstageAdministrationSeeImg',
+  name: 'BackstageRecoverySeeImg',
   data () {
     return {
       loading: true,
+      permissions: this.$store.state.user.permissions,
       types: this.$store.state.user.types,
       projects: this.$store.state.user.projects,
       typeImg: '',
@@ -118,13 +117,22 @@ export default {
         })
       })
     },
-    modifyArticle (mid) {
-      this.$store.commit('setUserMid', mid)
-      this.$store.dispatch('setLocalStorage', this.$store.state)
-      this.navSwitch('modifyImg')
+    reduction (mid) {
+      this.$confirm('此操作将还原该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        reductionInterface(this, mid)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     },
     queryArticle () {
-      administrationArticleQuery(this)
+      recoveryArticleAll(this)
     },
     returnSrc (src) {
       return this.URLS + src
@@ -141,7 +149,7 @@ export default {
   created () {
     this.types = this.$store.state.user.types
     this.projects = this.$store.state.user.projects
-    administrationArticleAll(this)
+    recoveryArticleAll(this)
     userList2(this)
   }
 }
@@ -166,13 +174,13 @@ export default {
   .articleList dd .articleTime span{display: block;float: left;height: 60px; width: 40%;color: #2f6d66;}
   .articleList dd .articleTime span:nth-child(1){font-weight: bold; font-size: 40px;  text-indent: .5em; line-height: 60px;}
   .articleList dd .articleTime span:nth-child(2){ text-align: right; line-height: 30px;width: 55%;padding-right: 5%;    font-size: 12px;}
-  .articleList dd .articleButton{width:100%;height: 70px;}
-  .articleList dd .articleButton span{display: block;float: left;height: 70px; width: 50%;color: #2f6d66;}
-  .articleList dd .articleButton span:nth-child(1){font-weight: bold; font-size: 16px; text-align: justify; width: 46%; line-height:24px;    padding: 0 2%;}
-  .articleList dd .articleButton span:nth-child(2){ text-align: right; line-height: 30px;}
-  .articleList dd .articleButton span:nth-child(2) a{display: block; float: left; width: 33%; text-align: center; color: #FFFFFF; margin-top: 40px; cursor: pointer;}
-  .articleList dd .articleButton span:nth-child(2) a:nth-child(1){background: #00bca8;border-radius:  1em 0 0 0;}
-  .articleList dd .articleButton span:nth-child(2) a:nth-child(2){background: #f56c6c;}
-  .articleList dd .articleButton span:nth-child(2) a:nth-child(3){width: 34%; background: #67c23a; border-radius: 0 0 1em 0;}
+  .articleList dd .articleButton2{width:100%;height: 70px;}
+  .articleList dd .articleButton2 span{display: block;float: left;height: 70px; width: 50%;color: #2f6d66;}
+  .articleList dd .articleButton2 span:nth-child(1){font-weight: bold; font-size: 16px; text-align: justify; width: 46%; line-height:24px;    padding: 0 2%;}
+  .articleList dd .articleButton2 span:nth-child(2){ text-align: right; line-height: 30px;}
+  .articleList dd .articleButton2 span:nth-child(2) a{display: block; float: right !important; width: 33%; text-align: center; color: #FFFFFF; margin-top: 40px; cursor: pointer;}
+  .articleList dd .articleButton2 span:nth-child(2) a:nth-child(1){background: #00bca8;border-radius:  .5em 0 0 0 !important;}
+  /*.articleList dd .articleButton span:nth-child(2) a:nth-child(2){background: #e60012;}
+  .articleList dd .articleButton span:nth-child(2) a:nth-child(3){width: 34%; background: #00e620; border-radius: 0 0 1em 0;}*/
   .prompt{height: 100px;text-align: center;line-height: 100px;font-size: 20px;}
 </style>
