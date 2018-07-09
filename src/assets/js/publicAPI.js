@@ -44,6 +44,84 @@ function padLeftZero (str) {
 }
 
 /**
+ * 返回项目名称的所属id
+ * */
+export function getProjectID (_this, xname) {
+  let id = ''
+  for (let i = 0; i < _this.projects.length; i++) {
+    if (_this.projects[i].xname === xname) {
+      id = _this.projects[i].pid
+    }
+  }
+  return id
+}
+
+/**
+ * 返回项目id所属名称
+ * */
+export function getProjectName (_this, pid) {
+  let name = ''
+  for (let i = 0; i < _this.projects.length; i++) {
+    if (_this.projects[i].pid === pid) {
+      name = _this.projects[i].xname
+    }
+  }
+  return name
+}
+
+/**
+ * 返回项目类型的所属id
+ * */
+export function getTypesID (_this, lname) {
+  let id = ''
+  for (let i = 0; i < _this.types.length; i++) {
+    if (_this.types[i].lname === lname) {
+      id = _this.types[i].tid
+    }
+  }
+  return id
+}
+
+/**
+ * 返回项目类型id所属类型名称
+ * */
+export function getTypesName (_this, tid) {
+  let name = ''
+  for (let i = 0; i < _this.types.length; i++) {
+    if (_this.types[i].tid === tid) {
+      name = _this.types[i].lname
+    }
+  }
+  return name
+}
+
+/**
+ * 返回项目的小分类ID
+ * */
+export function getMinTypesID (_this, name) {
+  let id = ''
+  for (let i = 0; i < _this.minTypes.length; i++) {
+    if (_this.minTypes[i].dname === name) {
+      id = _this.minTypes[i].did
+    }
+  }
+  return id
+}
+
+/**
+ * 返回项目小分类id所属名称
+ * */
+export function getMinTypesName (_this, did) {
+  let name = ''
+  for (let i = 0; i < _this.minTypes.length; i++) {
+    if (_this.minTypes[i].did === did) {
+      name = _this.minTypes[i].dname
+    }
+  }
+  return name
+}
+
+/**
  * 返回顶部
  * */
 function returnTop () {

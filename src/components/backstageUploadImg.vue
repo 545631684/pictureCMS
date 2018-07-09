@@ -11,7 +11,7 @@
     <el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
       <div class="title" >
         <span>分类：</span>
-        <el-select v-model="projectImg" placeholder="请选择项目" clearable style="width:200px; color: #409eff;">
+        <el-select v-model="projectImg" placeholder="请选择项目" filterable clearable style="width:200px; color: #409eff;">
           <el-option
             v-for="item in projects"
             :key="item.pid"
@@ -19,12 +19,20 @@
             :value="item.xname">
           </el-option>
         </el-select>
-        <el-select v-model="typeImg" placeholder="请选择项目下小分类" clearable style="width:200px;margin-left: 50px; color: #409eff;">
+        <el-select v-model="typeImg" placeholder="请选择分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
           <el-option
             v-for="item in types"
             :key="item.tid"
             :label="item.lname"
             :value="item.lname">
+          </el-option>
+        </el-select>
+        <el-select v-model="minTypeImg" placeholder="请选择小分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
+          <el-option
+            v-for="item in minTypes2"
+            :key="item.did"
+            :label="item.dname"
+            :value="item.dname">
           </el-option>
         </el-select>
       </div>
@@ -36,7 +44,7 @@
       <p class="imgName" >图片：</p>
       <div class="imgs">
         <el-upload
-          :limit="1000"
+          :limit="200"
           ref="fliesImg"
           :multiple="true"
           accept=".jpg,.png,.gif"
@@ -90,7 +98,8 @@
       <div class="imgs" style="width: 20%;">
         <el-upload
           style="margin-top: 44px;"
-          :limit="1"
+          :limit="100"
+          :multiple="true"
           ref="videoFile"
           accept=".mp4,.flv"
           class="upload-demo"
@@ -110,6 +119,7 @@
 
 <script>
 import { deleteTemporaryFile, addImgsFile, queryTitle, deleteTemporaryFile2 } from '../assets/js/api'
+import { getProjectID, getProjectName, getTypesID, getTypesName, getMinTypesID, getMinTypesName } from '../assets/js/publicAPI'
 export default {
   name: 'UploadImg',
   props: ['navs'],
@@ -132,14 +142,126 @@ export default {
       },
       imgCrsString: '',
       action: this.URLS + '/index.php/Home/Index/upfile',
-      types: this.$store.state.user.types,
       projects: this.$store.state.user.projects,
+      types: this.$store.state.user.types,
+      minTypes: this.$store.state.user.minType,
+      minTypes2: this.$store.state.user.minType,
       typeImg: '',
       projectImg: '',
+      minTypeImg: '',
       psdImageUrlls: '',
       videoImageUrlls: '',
       release: false,
       uploadFiles: []
+    }
+  },
+  watch: {
+    projectImg: function (newQuestion, oldQuestion) {
+      console.log('projectImg')
+      this.minTypes2 = []
+      if (this.projectImg.length !== 0) {
+        let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+        let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+          	if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+          	  this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+          	}
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+          	if (pid === this.minTypes[i].pbid) {
+          	  this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+          	}
+          }
+        }
+      } else {
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getTypesID(this, this.typeImg) === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    typeImg: function (newQuestion, oldQuestion) {
+      console.log('typeImg')
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.typeImg.length !== 0) {
+        if (this.projectImg.length !== 0) {
+          // this.minTypeImg = ''
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        }
+      } else {
+        if (this.projectImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getProjectID(this, this.projectImg) === this.minTypes[i].pbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypeImg: function (newQuestion, oldQuestion) {
+      console.log('minTypeImg')
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.minTypeImg.length !== 0) {
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypeImg === this.minTypes[i].dname) {
+            this.projectImg = getProjectName(this, this.minTypes[i].pbid)
+            this.typeImg = getTypesName(this, this.minTypes[i].tbid)
+            pid = this.minTypes[i].pbid
+            tid = this.minTypes[i].tbid
+          }
+        }
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypes[i].pbid === pid && this.minTypes[i].tbid === tid) {
+            this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+          }
+        }
+      } else if (this.minTypeImg.length === 0) {
+        if (this.projectImg.length !== 0) {
+          if (this.typeImg.length !== 0) {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          } else {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypes2: function (newQuestion, oldQuestion) {
+      if (this.minTypes2.length === 0) {
+        this.minTypeImg = ''
+      }
     }
   },
   methods: {
@@ -316,7 +438,9 @@ export default {
       } else if (this.projectImg.length === 0) {
         this.$alert('请选择项目类型', '警告', {confirmButtonText: '确定'})
       } else if (this.typeImg.length === 0) {
-        this.$alert('请选择项目下的小类别', '警告', {confirmButtonText: '确定'})
+        this.$alert('请选择项目下的分类', '警告', {confirmButtonText: '确定'})
+      } else if (this.minTypeImg.length === 0) {
+        this.$alert('请选择项目下的小分类', '警告', {confirmButtonText: '确定'})
       } else if (this.describe.length === 0) {
         this.$alert('请填写描述内容', '警告', {confirmButtonText: '确定'})
       } else if (this.imgCrsString.length === 0 && this.psd.psdFile.length === 0 && this.video.videoImg.url.length === 0 && this.video.videoFile.length === 0) {
@@ -332,7 +456,7 @@ export default {
         this.loading = true
         this.psd = this.psd.psdFile.length !== 0 ? this.psd : 'f'
         this.video = this.video.videoFile.length !== 0 && this.video.videoImg.url.length !== 0 ? this.video : 'f'
-        addImgsFile(this, typeId, projectId, this.psd, this.video, this.describe)
+        addImgsFile(this, typeId, projectId, this.psd, this.video, this.describe, getMinTypesID(this, this.minTypeImg))
       }
     },
     handleAvatarSuccess (res, file) {

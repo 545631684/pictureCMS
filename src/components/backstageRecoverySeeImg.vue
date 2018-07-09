@@ -2,7 +2,7 @@
   <el-container>
     <el-footer class="clearfix" style="height:auto">
       <el-input class="ma10" placeholder="请输入搜索内容" v-model="searchTXT" clearable style="width:400px;"></el-input>
-      <el-select v-if="permissions === '2'" class="ma10" v-model="userName" placeholder="用户" clearable style="width:200px; color: #409eff;margin-left: 20px;">
+      <el-select v-if="permissions === '2'" class="ma10" v-model="userName" placeholder="用户" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
         <el-option
           v-for="item in userList"
           :key="item.uId"
@@ -10,7 +10,7 @@
           :value="item.nickname">
         </el-option>
       </el-select>
-      <el-select class="ma10" v-model="projectImg" placeholder="项目" clearable style="width:200px; color: #409eff;margin-left: 20px;">
+      <el-select class="ma10" v-model="projectImg" placeholder="项目" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
         <el-option
           v-for="item in projects"
           :key="item.pid"
@@ -18,7 +18,7 @@
           :value="item.xname">
         </el-option>
       </el-select>
-      <el-select class="ma10" v-model="typeImg" placeholder="项目下小分类" clearable style="width:200px;margin-left: 20px; color: #409eff;">
+      <el-select class="ma10" v-model="typeImg" placeholder="分类" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
         <el-option
           v-for="item in types"
           :key="item.tid"
@@ -26,6 +26,14 @@
           :value="item.lname">
         </el-option>
       </el-select>
+      <el-select v-model="minTypeImg" placeholder="小分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
+          <el-option
+            v-for="item in minTypes2"
+            :key="item.did"
+            :label="item.dname"
+            :value="item.dname">
+          </el-option>
+        </el-select>
       <el-button class="ma10" type="primary" style="margin-left: 20px;" v-on:click.stop="queryArticle()">查询</el-button>
       <el-button class="ma10" type="primary" style="margin-left: 20px;" v-on:click.stop="navSwitch('uploadImg')">上传图片</el-button>
     </el-footer>
@@ -33,7 +41,7 @@
       <dl v-loading="loading" class="articleList clearfix" v-if="article.lenght !== 0">
         <dd v-for="(item, index) in article" :key="item.mId">
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 0">
-            <img src="http://192.168.0.108/image/timg.jpg" width="340" height="234"/>
+            <img :src="URLS2 + 'image/timg.jpg'" width="340" height="234"/>
           </p>
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 1">
             <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234"/>
@@ -66,7 +74,7 @@
 </template>
 
 <script>
-import { formatDate } from '../assets/js/publicAPI'
+import { formatDate, getProjectID, getProjectName, getTypesID, getTypesName } from '../assets/js/publicAPI'
 import { recoveryArticleAll, administrationArticleQuery, delArticle2, userList2, reductionInterface } from '../assets/js/api'
 export default {
   props: ['navs'],
@@ -77,13 +85,126 @@ export default {
       permissions: this.$store.state.user.permissions,
       types: this.$store.state.user.types,
       projects: this.$store.state.user.projects,
+      minTypes: this.$store.state.user.minType,
+      minTypes2: this.$store.state.user.minType,
       typeImg: '',
       projectImg: '',
+      minTypeImg: '',
       userName: '',
       searchTXT: '',
       article: [],
       prompt: '',
-      userList: []
+      userList: [],
+      URLS2: this.URLS2
+    }
+  },
+  watch: {
+    projectImg: function (newQuestion, oldQuestion) {
+      console.log('projectImg')
+      this.minTypes2 = []
+      if (this.projectImg.length !== 0) {
+        let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+        let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        }
+      } else {
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getTypesID(this, this.typeImg) === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    typeImg: function (newQuestion, oldQuestion) {
+      console.log('typeImg')
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.typeImg.length !== 0) {
+        if (this.projectImg.length !== 0) {
+          // this.minTypeImg = ''
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        }
+      } else {
+        if (this.projectImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getProjectID(this, this.projectImg) === this.minTypes[i].pbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypeImg: function (newQuestion, oldQuestion) {
+      console.log('minTypeImg')
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.minTypeImg.length !== 0) {
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypeImg === this.minTypes[i].dname) {
+            this.projectImg = getProjectName(this, this.minTypes[i].pbid)
+            this.typeImg = getTypesName(this, this.minTypes[i].tbid)
+            pid = this.minTypes[i].pbid
+            tid = this.minTypes[i].tbid
+          }
+        }
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypes[i].pbid === pid && this.minTypes[i].tbid === tid) {
+            this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+          }
+        }
+      } else if (this.minTypeImg.length === 0) {
+        if (this.projectImg.length !== 0) {
+          if (this.typeImg.length !== 0) {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          } else {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypes2: function (newQuestion, oldQuestion) {
+      if (this.minTypes2.length === 0) {
+        this.minTypeImg = ''
+      }
     }
   },
   methods: {

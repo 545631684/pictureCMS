@@ -18,7 +18,8 @@ export default new Vuex.Store({
       HeadPortraitSrc: '',
       setPasswordStyle: false,
       types: [],
-      projects: []
+      projects: [],
+      minType: []
     },
     mId: ''
   },
@@ -39,6 +40,7 @@ export default new Vuex.Store({
       state.user.setPasswordStyle = user.setPasswordStyle
       state.user.types = user.types
       state.user.projects = user.projects
+      state.user.minType = user.minType
       state.mId = user.mId
     },
     setUserInfo (state, user) { // 修改个人信息赋值
@@ -63,7 +65,8 @@ export default new Vuex.Store({
         HeadPortraitSrc: '',
         setPasswordStyle: state.user.setPasswordStyle,
         types: [],
-        projects: []
+        projects: [],
+        minType: []
       }
       state.mId = ''
       // localStorage.clear()
@@ -85,6 +88,7 @@ export default new Vuex.Store({
       Vue.localStorage.set('saiqisetPasswordStyle', user.state.user.setPasswordStyle)
       Vue.localStorage.set('saiqiseTtypes', JSON.stringify(user.state.user.types))
       Vue.localStorage.set('saiqiseProjects', JSON.stringify(user.state.user.projects))
+      Vue.localStorage.set('saiqiseMinType', JSON.stringify(user.state.user.minType))
       Vue.localStorage.set('saiqisemId', user.state.mId)
       // console.log(user.state.user.types)
       // console.log(Vue.localStorage.get('saiqiuserName') + '存储成功')
@@ -104,6 +108,7 @@ export default new Vuex.Store({
       store.state.user.setPasswordStyle = Vue.localStorage.get('saiqisetPasswordStyle')
       store.state.user.types = JSON.parse(Vue.localStorage.get('saiqiseTtypes'))
       store.state.user.projects = JSON.parse(Vue.localStorage.get('saiqiseProjects'))
+      store.state.user.minType = JSON.parse(Vue.localStorage.get('saiqiseMinType'))
       store.state.mId = Vue.localStorage.get('saiqisemId')
     }
   },

@@ -46,7 +46,7 @@
       <div class="fileList clearfix">
         <ul class="clearfix">
           <li v-for="(item, index) in psdList">
-            <router-link tag="a" class="" :to="'/article/index/psdAll/' + item.mId" :title="item.title">
+            <router-link tag="a" class="" :to="'/article/' + currentP.name + '/psd/' + item.mId" :title="item.title">
               <img class="fileImg" :src="getHeadPortraitSrc2(item.img[0].url)" alt="" v-if="item.img.length !== 0"/>
               <img class="fileImg" :src="URLS2 + 'image/timg.jpg'" alt="" v-else=""/>
               <p>{{item.title}}</p>
@@ -73,7 +73,7 @@
 import { cancellationUser, projectList, exhibitionAllimg, exhibitionAllpsd, exhibitionAllvideo, } from '../assets/js/api'
 import { formatDate } from '../assets/js/publicAPI'
 export default {
-  name: 'psdList',
+  name: 'pPsdList',
   data () {
     return {
       name: '',
@@ -99,6 +99,7 @@ export default {
       sort: '1',
       loading: false,
       prompt: '点击加载更多',
+      navPname: '',
       URLS2: this.URLS2
     }
   },
@@ -109,6 +110,12 @@ export default {
       if (this.count !== 0) {
         this.PageCount = parseInt(this.count / this.pageSize)
       }
+    },
+    PList: function (newQuestion, oldQuestion) {
+      this.href.img = '/listImg' + '/' + this.PList[0].xname + '/' + this.PList[0].pid
+      this.href.psd = '/listPsd' + '/' + this.PList[0].xname + '/' + this.PList[0].pid
+      this.href.video = '/listVideo' + '/' + this.PList[0].xname + '/' + this.PList[0].pid
+      this.navName = this.PList[0].xname
     }
   },
   methods: {
@@ -116,7 +123,7 @@ export default {
       if (this.page < this.PageCount) {
         this.loading = true
         this.page =  this.page + 1
-        exhibitionAllpsd(this, {title: this.searchTitle, pid: '', tid: '', sort: this.sort, p: this.page})
+        exhibitionAllpsd(this, {title: this.searchTitle, pid: this.$route.params.id, tid: '', sort: this.sort, p: this.page})
       } else {
         this.prompt = '已经被你掏空了。。。o(╥﹏╥)o'
       }
@@ -128,10 +135,10 @@ export default {
       this.PageCount = 0
       this.count = 0
       if (this.searchTitle.length !== 0) {
-        exhibitionAllpsd(this, {title: this.searchTitle, pid: '', tid: '', sort: this.sort, p: '1'})
+        exhibitionAllpsd(this, {title: this.searchTitle, pid: this.$route.params.id, tid: '', sort: this.sort, p: '1'})
         this.prompt = '已经被你掏空了。。。o(╥﹏╥)o'
       } else {
-        exhibitionAllpsd(this, {title: this.searchTitle, pid: '', tid: '', sort: this.sort, p: '1'})
+        exhibitionAllpsd(this, {title: this.searchTitle, pid: this.$route.params.id, tid: '', sort: this.sort, p: '1'})
         this.prompt = '点击加载更多'
       }
     },
@@ -142,7 +149,7 @@ export default {
       this.page = 1
       this.PageCount = 0
       this.count = 0
-      exhibitionAllpsd(this, {title: this.searchTitle, pid: '', tid: '', sort: this.sort, p: '1'})
+      exhibitionAllpsd(this, {title: this.searchTitle, pid: this.$route.params.id, tid: '', sort: this.sort, p: '1'})
       this.prompt = '点击加载更多'
     },
     sort2 () {
@@ -152,7 +159,7 @@ export default {
       this.page = 1
       this.PageCount = 0
       this.count = 0
-      exhibitionAllpsd(this, {title: this.searchTitle, pid: '', tid: '', sort: this.sort, p: '1'})
+      exhibitionAllpsd(this, {title: this.searchTitle, pid: this.$route.params.id, tid: '', sort: this.sort, p: '1'})
       this.prompt = '点击加载更多'
     },
     navTad () {
@@ -189,7 +196,6 @@ export default {
   created() {
     this.loading = true
     projectList(this)
-    exhibitionAllpsd(this, {title: '', pid: '', tid: '', sort: '1', p: '1'})
     this.$store.dispatch('getLocalStorage', this.$store.state.user)
     if (this.$store.state.user.state === '1') {
       this.name = this.$store.state.user.nickname || this.$store.state.user.name
@@ -200,6 +206,10 @@ export default {
     } else {
       this.state = false
     }
+    this.navPname = this.$route.params.navPname
+    this.currentP.name = this.$route.params.navPname
+    this.currentP.id = this.$route.params.id
+    exhibitionAllpsd(this, {title: '', pid: this.$route.params.id, tid: '', sort: '1', p: '1'})
   }
 }
 </script>

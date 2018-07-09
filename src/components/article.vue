@@ -19,13 +19,13 @@
             <div class="tad clearfix">
               <dl>
                 <dd>
-                  <router-link tag="a" class="" :to="{path:href.img}">{{navName}}</router-link>
+                  <router-link tag="a" class="" :to="{path:href.img}" target="_blank">{{navName}}</router-link>
                 </dd>
                 <dd>
-                  <router-link tag="a" class="" :to="{path:href.psd}">{{navName}}</router-link>
+                  <router-link tag="a" class="" :to="{path:href.psd}" target="_blank">{{navName}}</router-link>
                 </dd>
                 <dd>
-                  <router-link tag="a" class="" :to="{path:href.video}">{{navName}}</router-link>
+                  <router-link tag="a" class="" :to="{path:href.video}" target="_blank">{{navName}}</router-link>
                 </dd>
               </dl>
             </div>
@@ -36,7 +36,12 @@
     <section class="content" v-show="!loading">
         <div class="FileCheck ">
             <ul>
-              <li><a href=""><img src="../assets/images/psd_1.jpg"/></a><a href="" class="tit">{{title}}</a></li>
+              <li>
+                <a v-if="imgDiv"><img src="../assets/images/pic_1.jpg"/></a>
+                <a v-if="psdDiv"><img src="../assets/images/psd_1.jpg"/></a>
+                <a v-if="videoDiv"><img src="../assets/images/vid_4.jpg"/></a>
+                <a href="" class="tit">{{title}}</a>
+              </li>
               <li><a>{{formatDate(registerTime)}}</a></li>
                 <li><a :href="navPnameSrc">{{navPname}}</a>/<a :href="navTnameSrc">{{navTname}}</a>/<a class="blue">{{title}}</a></li>
             </ul>
@@ -50,10 +55,10 @@
           <div v-if="imgHtml.length === 0">
             <div v-for="(item, index) in imgFile" v-if="imgFile">
               <ul class="pic_box">
-                <li><img :src="'http://192.168.0.108/' + item.url" alt="" /></li>
+                <li><img v-lazy="url2 + item.url" alt="" /></li>
               </ul>
               <ul class="clearfix" style="margin: 20px auto;" v-if="navTname === 'all'">
-                <li style="float: right; padding-right: 20px;"><a :href="'http://192.168.0.108/' + item.url" :download="item.name"><img src="../assets/images/pic_5.jpg"/></a></li>
+                <li style="float: right; padding-right: 20px;"><a :href="url2 + item.url" :download="item.name"><img src="../assets/images/pic_5.jpg"/></a></li>
               </ul>
             </div>
           </div>
@@ -63,15 +68,15 @@
           <div v-if="psdHtml.length === 0">
             <div v-for="(item, index) in imgFile" v-if="imgFile">
               <ul class="pic_box">
-                <li><img :src="'http://192.168.0.108/' + item.url" alt="" /></li>
+                <li><img v-lazy="url2 + item.url" alt="" /></li>
               </ul>
               <ul class="clearfix" style="margin: 20px auto;" v-if="navTname === 'all'">
-                <li style="float: right; padding-right: 20px;"><a :href="'http://192.168.0.108/' + item.url" :download="item.name"><img src="../assets/images/pic_5.jpg"/></a></li>
+                <li style="float: right; padding-right: 20px;"><a :href="url2 + item.url" :download="item.name"><img src="../assets/images/pic_5.jpg"/></a></li>
               </ul>
             </div>
             <div v-for="(item, index) in psdFile.psdFile" v-if="navTname === 'all'">
               <ul class="clearfix" style="margin: 20px auto;">
-                <li><a :href="'http://192.168.0.108/' + item.url" :download="item.name">PSD文件：{{item.name}}&emsp;&emsp;&emsp;&emsp;点击下载</a></li>
+                <li><a :href="url2 + item.url" :download="item.name">PSD文件：{{item.name}}&emsp;&emsp;&emsp;&emsp;点击下载</a></li>
               </ul>
             </div>
           </div>
@@ -81,18 +86,21 @@
           <div v-if="videoHtml.length === 0">
             <div v-if="videoFile.videoFile">
               <ul class="pic_box">
-                <li>
-                  <video-player  
+                <li v-for="(item, index) in videoFile.videoFile">
+                  <!--<video-player  
                     class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
-                    :options="playerOptions"></video-player>
+                    :options="item"></video-player>-->
+                    <video width="900" height="500" controls="controls" :poster="url2 + videoFile.videoImg.url" style="margin: auto; display: block; background: #000000;">
+                      <source :src="url2 + item.url" type="video/mp4" />
+                    </video>
                 </li>
               </ul>
             </div>
             <div>
               <ul class="clearfix" style="margin: 20px auto;" v-if="navTname === 'all'">
-                <li><a @click="download2('http://192.168.0.108/' + videoFile.videoFile[0].url)" :download="videoFile.videoFile[0].name">视频文件：{{videoFile.videoFile[0].name}}&emsp;&emsp;&emsp;&emsp;点击下载</a></li>
+                <li><a @click="download2(url2 + videoFile.videoFile[0].url)" :download="videoFile.videoFile[0].name">视频文件：{{videoFile.videoFile[0].name}}&emsp;&emsp;&emsp;&emsp;点击下载</a></li>
               </ul>
             </div>
           </div>
@@ -105,12 +113,14 @@
             <img src="../assets/images/pic_bottom.jpg" alt="" />
         </div>
     </div>
+    <FixedTel></FixedTel>
   </div>
 </template>
 
 <script>
 import { cancellationUser, projectList, exhibitionDetails2 } from '../assets/js/api'
 import { formatDate } from '../assets/js/publicAPI'
+import FixedTel from '../components/fixedTel'
 export default {
   name: 'articleFile',
   data () {
@@ -163,6 +173,7 @@ export default {
           fullscreenToggle: true //全屏按钮 
           }
       },
+      videoObj: [],
       navPname: '', // 东莞、、、 index
       navPnameSrc: '',
       pid: '',
@@ -170,7 +181,8 @@ export default {
       navTnameSrc: '',
       imgHtml: '',
       psdHtml: '',
-      videoHtml: ''
+      videoHtml: '',
+      url2: this.URLS2
     }
   },
   watch: {
@@ -178,8 +190,18 @@ export default {
     videoFile: function (newQuestion, oldQuestion) {
       if (this.videoFile.videoFile.length !== 0) {
         this.videoHtml = ''
-        this.playerOptions.sources[0].src = 'http://192.168.0.108/' + this.videoFile.videoFile[0].url
-        this.playerOptions.poster = 'http://192.168.0.108/' + this.videoFile.videoImg.url
+        console.log(this.videoFile.videoFile.length)
+        for (let i = 0;i < this.videoFile.videoFile.length; i++) {
+          var obj = this.playerOptions
+          obj.sources[0] = {
+            type: '',
+            src: this.URLS2 + this.videoFile.videoFile[i].url
+          }
+          obj.poster = this.URLS2 + this.videoFile.videoImg.url
+          this.videoObj[this.videoObj.length] = obj
+          //console.log(',url:' + this.videoObj.sources[0])
+          // obj = {}
+        }
       } else {
         this.videoHtml = '主人很懒，什么都没上传(ಥ_ಥ)'
       }
@@ -189,7 +211,8 @@ export default {
         this.psdHtml = ''
       } else {
         this.psdHtml = '主人很懒，什么都没上传(ಥ_ಥ)'
-      }console.log(this.psdHtml.length)
+      }
+      // console.log(this.psdHtml.length)
     },
     imgFile: function (newQuestion, oldQuestion) {
       if (this.imgFile.length !== 0) {
@@ -262,10 +285,10 @@ export default {
     navPSrc (name) {
       console.log(name)
       if (name === 'index') {
-        this.navPnameSrc = 'http://192.168.0.108/'
+        this.navPnameSrc = this.URLS2
         this.navPname = '首页'
       } else if (name === 'backstage') {
-        this.navPnameSrc = 'http://192.168.0.108/#/backstage'
+        this.navPnameSrc = this.URLS2 + '#/backstage'
         this.navPname = '后台'
       } else {
         for (let i = 0; i < this.PList.length; i++) {
@@ -273,7 +296,7 @@ export default {
             this.pid = this.PList[i].pid
           }
           if (i === this.PList.length - 1) {
-            this.navPnameSrc = 'http://192.168.0.108/#/pindex/' + name + '/' + this.pid
+            this.navPnameSrc = this.URLS2 + '#/pindex/' + name + '/' + this.pid
           }
         }
       }
@@ -294,49 +317,49 @@ export default {
       switch(name)
       {
         case 'img':
-          this.navTnameSrc = 'http://192.168.0.108/#/listImg/' + this.navPname + '/' + this.pid
+          this.navTnameSrc = this.URLS2 + '#/listImg/' + this.navPname + '/' + this.pid
           this.navTname = '图片集'
           this.imgDiv = true
           this.psdDiv = false
           this.videoDiv = false
           break;
         case 'psd':
-          this.navTnameSrc = 'http://192.168.0.108/#/listPsd/' + this.navPname + '/' + this.pid
+          this.navTnameSrc = this.URLS2 + '#/listPsd/' + this.navPname + '/' + this.pid
           this.navTname = 'psd'
           this.imgDiv = false
           this.psdDiv = true
           this.videoDiv = false
           break;
         case 'video':
-          this.navTnameSrc = 'http://192.168.0.108/#/listVideo/' + this.navPname + '/' + this.pid
+          this.navTnameSrc = this.URLS2 + '#/listVideo/' + this.navPname + '/' + this.pid
           this.navTname = 'video'
           this.imgDiv = false
           this.psdDiv = false
           this.videoDiv = true
           break;
         case 'imgAll':
-          this.navTnameSrc = 'http://192.168.0.108/#/listImgAll/'
+          this.navTnameSrc = this.URLS2 + '#/listImgAll/'
           this.navTname = '图片集'
           this.imgDiv = true
           this.psdDiv = false
           this.videoDiv = false
           break;
         case 'psdAll':
-          this.navTnameSrc = 'http://192.168.0.108/#/listPsdAll/'
+          this.navTnameSrc = this.URLS2 + '#/listPsdAll/'
           this.navTname = 'psd'
           this.imgDiv = false
           this.psdDiv = true
           this.videoDiv = false
           break;
         case 'videoAll':
-          this.navTnameSrc = 'http://192.168.0.108/#/listVideoAll/'
+          this.navTnameSrc = this.URLS2 + '#/listVideoAll/'
           this.navTname = 'video'
           this.imgDiv = false
           this.psdDiv = false
           this.videoDiv = true
           break;
         case 'all':
-          this.navTnameSrc = 'http://192.168.0.108/#/backstage'
+          this.navTnameSrc = this.URLS2 + '#/backstage'
           this.navTname = 'all'
           break;
       }
@@ -359,6 +382,9 @@ export default {
     this.nacType = this.$route.params.nacType
     exhibitionDetails2(this, this.$route.params.id)
     
+  },
+  components: {
+    FixedTel
   }
 }
 </script>
@@ -412,7 +438,7 @@ export default {
 .articleHtml .FileCheck ul li .blue{color: #347fb5;}
 
 .articleHtml .pic_box{background: #FFFFFF;}
-.articleHtml .pic_box li {width: 960px;margin: auto;}
+.articleHtml .pic_box li {width: 960px;margin: 45px auto;/*border-bottom: solid 2px #000;*/padding-bottom: 10px;}
 .articleHtml .pic_box li img{display: block; margin: 10px auto; max-width: 900px;}
 .articleHtml .footer .foot{width: 100%;margin: 0 auto;}
 .articleHtml .footer div img{width: 100%;display: block; margin: auto;}

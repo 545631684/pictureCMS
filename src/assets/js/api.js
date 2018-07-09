@@ -5,8 +5,8 @@ import qs from 'qs'
 export function loginLand (_this) {
   Axios.post(_this.URLS + '/index.php/Home/Login/login.html', qs.stringify({userName: _this.userName, Password: _this.password}))
     .then(function (response) {
-      // console.log(response.data.msg)
       if (response.data.msg === '0') {
+        // console.log(response.data)
         // 给全局变量赋值
         let user = {
           uId: response.data.uId,
@@ -22,6 +22,7 @@ export function loginLand (_this) {
           setPasswordStyle: _this.setPasswordStyle,
           types: response.data.types,
           projects: response.data.projects,
+          minType: response.data.details,
           mId: _this.$store.state.mId
         }
         _this.$store.commit('setUsername', user)
@@ -265,10 +266,10 @@ export function deleteTemporaryFile2 (_this, imgSrc, type) {
 }
 
 // backstageUploadImg.vue 接口 用户上传发布图片信息
-export function addImgsFile (_this, tid, pid, psdsrc, videosrc, describe) {
+export function addImgsFile (_this, tid, pid, psdsrc, videosrc, describe, did) {
   console.log('uId:' + _this.$store.state.user.uId + ', title:' + _this.title + ', imgsrc:' + _this.imgCrss + ', psdsrc:' + psdsrc + ', videosrc:' + videosrc + ', tid:' + tid + ', pid:' + pid)
   _this.imgCrss = _this.imgCrss.length === 0 ? '' : _this.imgCrss
-  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionAdd', qs.stringify({uId: _this.$store.state.user.uId, title: _this.title, imgsrc: _this.imgCrss, psdsrc: psdsrc, videosrc: videosrc, tid: tid, pid: pid, describe: describe, zipfiles:  _this.imgCrsString}))
+  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionAdd', qs.stringify({uId: _this.$store.state.user.uId, title: _this.title, imgsrc: _this.imgCrss, psdsrc: psdsrc, videosrc: videosrc, tid: tid, pid: pid, did: did, describe: describe, zipfiles:  _this.imgCrsString}))
     .then(function (response) {
       // console.log(response.data)
       if (response.data.msg === '0') {
@@ -325,10 +326,10 @@ export function addImgsFile (_this, tid, pid, psdsrc, videosrc, describe) {
 }
 
 // backstageUploadImg.vue 接口 用户上传发布图片信息
-export function addImgsFile3 (_this, tid, pid, psdsrc, videosrc, describe) {
+export function addImgsFile3 (_this, tid, pid, psdsrc, videosrc, describe, did) {
   console.log('uId:' + _this.$store.state.user.uId + ', title:' + _this.title + ', imgsrc:' + _this.imgCrss + ', psdsrc:' + psdsrc + ', videosrc:' + videosrc + ', tid:' + tid + ', pid:' + pid)
   _this.imgCrss = _this.imgCrss.length === 0 ? '' : _this.imgCrss
-  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionAdd', qs.stringify({uId: _this.$store.state.user.uId, title: _this.title, imgsrc: _this.imgCrss, psdsrc: psdsrc, videosrc: videosrc, tid: tid, pid: pid, describe: describe}))
+  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionAdd', qs.stringify({uId: _this.$store.state.user.uId, title: _this.title, imgsrc: _this.imgCrss, psdsrc: psdsrc, videosrc: videosrc, tid: tid, pid: pid, did: did, describe: describe}))
     .then(function (response) {
       // console.log(response.data)
       if (response.data.msg === '0') {
@@ -377,7 +378,7 @@ export function addImgsFile2 (_this) {
   console.log('uId:' + _this.article.uId + ', title:' + _this.article.title + ', imgsrc:' + _this.article.img + ', psdsrc:' + _this.article.psd + ', videosrc:' + _this.article.video + ', tid:' + _this.article.tid + ', pid:' + _this.article.pid + ',需要删除的文件：' + _this.deleteFiles + ',mId:' + _this.article.mId)
   deleteTemporaryFile2(_this, _this.deleteFiles, 'all')
   _this.article.img = _this.article.img.length === 0 ? '' : _this.article.img
-  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionedit', qs.stringify({uId: _this.article.uId, title: _this.article.title, imgsrc: _this.article.img, psdsrc: _this.article.psd, videosrc: _this.article.video, tid: _this.article.tid, pid: _this.article.pid, describe: _this.article.describe, mId: _this.article.mId}))
+  Axios.post(_this.URLS + '/index.php/Home/Index/exhibitionedit', qs.stringify({uId: _this.article.uId, title: _this.article.title, imgsrc: _this.article.img, psdsrc: _this.article.psd, videosrc: _this.article.video, tid: _this.article.tid, pid: _this.article.pid, describe: _this.article.describe, mId: _this.article.mId, did: _this.article.did}))
     .then(function (response) {
       // console.log(response.data)
       if (response.data.msg === '0') {
@@ -898,6 +899,7 @@ export function updatePwd (_this) {
           setPasswordStyle: _this.$store.state.user.setPasswordStyle,
           types: _this.$store.state.user.types,
           projects: _this.$store.state.user.projects,
+          minType: _this.$store.state.user.minType,
           mId: _this.$store.state.mId
         }
         _this.$store.commit('setUsername', user)
@@ -1158,6 +1160,7 @@ export function projectList2 (_this) {
           setPasswordStyle: _this.$store.state.user.setPasswordStyle,
           types: _this.$store.state.user.types,
           projects: response.data,
+          minType: _this.$store.state.user.minType,
           mId: _this.$store.state.mId
         }
         _this.$store.commit('setUsername', user)
@@ -1217,6 +1220,7 @@ export function typeList2 (_this) {
           setPasswordStyle: _this.$store.state.user.setPasswordStyle,
           types: response.data,
           projects: _this.$store.state.user.projects,
+          minType: _this.$store.state.user.minType,
           mId: _this.$store.state.mId
         }
         _this.$store.commit('setUsername', user)
@@ -1383,7 +1387,9 @@ export function exhibitionDetails (_this, mId) {
         _this.title = _this.article.title
         _this.projectImg = _this.article.xname
         _this.typeImg = _this.article.lname
-        _this.describe = _this.article.describe
+        _this.typeImg = _this.article.lname
+        _this.did = _this.article.detailsid
+        _this.minTypeImg = _this.article.dname
         _this.article.img = JSON.parse(_this.article.img)
         _this.article.psd = JSON.parse(_this.article.psd)
         _this.article.video = JSON.parse(_this.article.video)
@@ -1560,6 +1566,153 @@ export function exhibitionDetails2 (_this, mid) {
       } else if (response.data.msg === '1') {
         _this.prompt = '没有查询到相关数据'
         _this.loading = false
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageMinType.vue 接口 获取小分类信息
+export function detailslist (_this, flag) {
+  Axios.get(_this.URLS + '/index.php/Home/Index/detailslist?flag=' + flag)
+    .then(function (response) {
+      if (response.data.msg !== "1") {
+        console.log(response.data)
+        _this.minType = response.data
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].states === '1') {
+            _this.minType[i].states = true
+          } else {
+            _this.minType[i].states = false
+          }
+        }
+        _this.loadingList = false
+      } else if (response.data.msg === '1') {
+        _this.prompt = '没有查询到相关数据'
+        _this.loadingList = false
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageMinType.vue 接口 添加小分类
+export function detailsAdd (_this, mixname, pid, tid) {
+  Axios.post(_this.URLS + '/index.php/Home/Index/detailsAdd', qs.stringify({pbid: pid, tbid: tid, dname: mixname}))
+    .then(function (response) {
+      if (response.data.msg === '0') {
+        _this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
+        _this.projectName = ''
+        _this.typeName = ''
+        _this.name = ''
+        _this.mixTypeAdd = false
+        _this.loadingList = true
+        detailslist(_this, '2')
+      } else if (response.data.msg === '1') {
+        _this.$message({
+          type: 'info',
+          message: '添加失败!'
+        })
+        _this.projectName = ''
+        _this.typeName = ''
+        _this.name = ''
+        _this.mixTypeAdd = false
+      } else if (response.data.msg === '2') {
+        _this.$message({
+          type: 'info',
+          message: '重复添加!'
+        })
+        _this.projectName = ''
+        _this.typeName = ''
+        _this.name = ''
+        _this.mixTypeAdd = false
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageMinType.vue 接口 启用小分类
+export function detailsEnable (_this, did) {
+  Axios.get(_this.URLS + '/index.php/Home/Index/detailsEnable?did=' + did)
+    .then(function (response) {
+      if (response.data.msg === '0') {
+        detailslist(_this, '2')
+        _this.$message({
+          type: 'success',
+          message: '启用成功!'
+        })
+      } else if (response.data.msg === '1') {
+        detailslist(_this, '2')
+        _this.$message({
+          type: 'info',
+          message: '启用失败!'
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageMinType.vue 接口 禁用小分类
+export function detailsDisable (_this, did) {
+  Axios.get(_this.URLS + '/index.php/Home/Index/detailsDisable?did=' + did)
+    .then(function (response) {
+      if (response.data.msg === '0') {
+        detailslist(_this, '2')
+        _this.$message({
+          type: 'success',
+          message: '禁用成功!'
+        })
+      } else if (response.data.msg === '1') {
+        detailslist(_this, '2')
+        _this.$message({
+          type: 'info',
+          message: '禁用失败!'
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+// backstageMinType.vue 接口 修改小分类
+export function detailssave (_this, did, pbid, tbid, dname) {
+  Axios.post(_this.URLS + '/index.php/Home/Index/detailssave', qs.stringify({did: did, pbid: pbid, tbid: tbid, dname: dname}))
+    .then(function (response) {
+      if (response.data.msg === '0') {
+        _this.$message({
+          type: 'success',
+          message: '修改成功!'
+        })
+        _this.dname = ''
+        _this.mixTypeModify = false
+        _this.mixTypeModifyUp = false
+        detailslist(_this, '2')
+      } else if (response.data.msg === '1') {
+        _this.$message({
+          type: 'info',
+          message: '修改失败!'
+        })
+        _this.mixTypeModify = false
+         _this.mixTypeModifyUp = false
+        _this.dname = ''
+      } else if (response.data.msg === '2') {
+        _this.$message({
+          type: 'info',
+          message: '信息重复，请重新修改!'
+        })
+        _this.mixTypeModify = false
+        _this.mixTypeModifyUp = false
+        _this.dname = ''
       }
     })
     .catch(function (error) {

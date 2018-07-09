@@ -30,6 +30,7 @@
             <dd v-if="permissions === '2'" :class="{on:navs.userAdd}" v-on:click.stop="navSwitch('userAdd')">创建用户</dd>
             <dd v-if="permissions === '2'" :class="{on:navs.userRecovery}" v-on:click.stop="navSwitch('userRecovery')">用户回收站</dd>
             <dd v-if="permissions === '2'" :class="{on:navs.projectType}" v-on:click.stop="navSwitch('projectType')">项目/类型管理</dd>
+            <dd v-if="permissions === '2'" :class="{on:navs.minType}" v-on:click.stop="navSwitch('minType')">小分类管理</dd>
           </dl>
         </el-aside>
         <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;overflow-x:hidden">
@@ -47,6 +48,7 @@
           <BackstageUploadPictureSet v-if="navs.uploadImg2" :navs="navs"></BackstageUploadPictureSet>
           <BackstageRecoverySeeImg v-if="navs.recoverySeeImg" :navs="navs"></BackstageRecoverySeeImg>
           <BackstageAddUser v-if="navs.userAdd" :navs="navs"></BackstageAddUser>
+          <BackstageMinType v-if="navs.minType" :navs="navs"></BackstageMinType>
         </el-main>
       </el-container>
     </el-container>
@@ -65,6 +67,7 @@ import ModifyPassword from '../components/modifyPassword'
 import BackstageUserList from '../components/backstageUserList'
 import BackstageUserListRecovery from '../components/backstageUserListRecovery'
 import BackstageProjectType from '../components/backstageProjectType'
+import BackstageMinType from '../components/backstageMinType'
 import BackstageUploadPictureSet from '../components/backstageUploadPictureSet'
 import BackstageRecoverySeeImg from '../components/backstageRecoverySeeImg'
 import BackstageAddUser from '../components/backstageAddUser'
@@ -90,7 +93,8 @@ export default {
         userRecovery: false,
         projectType: false,
         uploadImg2: false,
-        recoverySeeImg: false
+        recoverySeeImg: false,
+        minType: false
       }
     }
   },
@@ -113,6 +117,7 @@ export default {
       type === 'userAdd' ? this.navs.userAdd = true : this.navs.userAdd = false
       type === 'userRecovery' ? this.navs.userRecovery = true : this.navs.userRecovery = false
       type === 'projectType' ? this.navs.projectType = true : this.navs.projectType = false
+      type === 'minType' ? this.navs.minType = true : this.navs.minType = false
     }
   },
   created () {
@@ -140,7 +145,8 @@ export default {
     BackstageUploadPictureSet,
     BackstageRecoverySeeImg,
     BackstageAddUser,
-    BackstageSeeImgAll
+    BackstageSeeImgAll,
+    BackstageMinType
   }
 }
 </script>

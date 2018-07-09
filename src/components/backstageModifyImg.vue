@@ -11,7 +11,7 @@
     <el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
       <div class="title" >
         <span>分类：</span>
-        <el-select v-model="article.xname" placeholder="请选择项目" clearable style="width:200px; color: #409eff;">
+        <el-select v-model="article.xname" placeholder="请选择项目" filterable clearable style="width:200px; color: #409eff;">
           <el-option
             v-for="item in projects"
             :key="item.pid"
@@ -19,12 +19,20 @@
             :value="item.xname">
           </el-option>
         </el-select>
-        <el-select v-model="article.lname" placeholder="请选择项目下小分类" clearable style="width:200px;margin-left: 50px; color: #409eff;">
+        <el-select v-model="article.lname" placeholder="请选择分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
           <el-option
             v-for="item in types"
             :key="item.tid"
             :label="item.lname"
             :value="item.lname">
+          </el-option>
+        </el-select>
+        <el-select v-model="minTypeImg" placeholder="请选择小分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
+          <el-option
+            v-for="item in minTypes2"
+            :key="item.did"
+            :label="item.dname"
+            :value="item.dname">
           </el-option>
         </el-select>
       </div>
@@ -37,7 +45,7 @@
       <div class="imgs" v-if="imgDiv">
         <ul class="el-upload-list el-upload-list--picture-card" style="float: left;" v-if="article.img.length !== 0">
           <li tabindex="0" class="el-upload-list__item is-success" v-for="(item, index) in article.img" :key="index">
-            <img :src="'http://192.168.0.108/' + item.url" alt="" class="el-upload-list__item-thumbnail">
+            <img :src="URLS2 + item.url" alt="" class="el-upload-list__item-thumbnail">
             <a class="el-upload-list__item-name"><i class="el-icon-document"></i>13-1F51QS039532.jpg</a>
             <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-check"></i></label>
             <i class="el-icon-close"></i><i class="el-icon-close-tip">按 delete 键可删除</i>
@@ -49,7 +57,8 @@
         </ul>
         <el-upload
           style="width: 156px;height: 148px;float: left;"
-          :limit="20"
+          :limit="200"
+          :multiple="true"
           ref="fliesImg"
           accept=".jpg,.png,.gif"
           :action="action + '?id=1'"
@@ -100,7 +109,7 @@
         <dl class="psdList" v-if="article.psd.psdFile !== []">
         	<dd v-for="(item, index) in article.psd.psdFile" :key="index">
         	  <span>{{item.name}}</span>
-        	  <a :href="'http://192.168.0.108/' + item.url" :download="item.name"><i class="el-icon-download"></i></a>
+        	  <a :href="URLS2 + item.url" :download="item.name"><i class="el-icon-download"></i></a>
         	  <samp  @click="handleRemove3('', item.url, 'psd')"><i class="el-icon-circle-close"></i></samp>
         	</dd>
         </dl>
@@ -111,7 +120,7 @@
       <div class="imgs" style="width: 50%;" v-if="videoDiv">
         <ul class="el-upload-list el-upload-list--picture-card" style="float: left;" >
           <li tabindex="0" class="el-upload-list__item is-success">
-            <img :src="'http://192.168.0.108/' + article.video.videoImg.url" alt="" class="el-upload-list__item-thumbnail">
+            <img :src="URLS2 + article.video.videoImg.url" alt="" class="el-upload-list__item-thumbnail">
             <a class="el-upload-list__item-name"><i class="el-icon-document"></i>13-1F51QS039532.jpg</a>
             <label class="el-upload-list__item-status-label"><i class="el-icon-upload-success el-icon-check"></i></label>
             <i class="el-icon-close"></i><i class="el-icon-close-tip">按 delete 键可删除</i>
@@ -123,8 +132,8 @@
         </ul>
         <p class="navs">
           <el-button class="download" type="danger" @click="handleRemove3(article.video.videoImg.url, article.video.videoFile[0].url, 'video')">删除重新上传</el-button>
-          <a :href="'http://192.168.0.108/' + article.video.videoImg.url" :download="article.video.videoImg.name" class="download el-button el-button--primary">点击下载缩略图</a>
-          <a :href="'http://192.168.0.108/' + article.video.videoFile[0].url" :download="article.video.videoFile[0].name" class="download el-button el-button--primary">点击下载文件</a>
+          <a :href="URLS2 + article.video.videoImg.url" :download="article.video.videoImg.name" class="download el-button el-button--primary">点击下载缩略图</a>
+          <a :href="URLS2 + article.video.videoFile[0].url" :download="article.video.videoFile[0].name" class="download el-button el-button--primary">点击下载文件</a>
         </p>
       </div>
       <div class="imgs" style="width: 20%;" v-if="!videoDiv">
@@ -171,6 +180,7 @@
 
 <script>
 import { deleteTemporaryFile2, addImgsFile2, queryTitle2, exhibitionDetails } from '../assets/js/api'
+import { getProjectID, getProjectName, getTypesID, getTypesName, getMinTypesName, getMinTypesID } from '../assets/js/publicAPI'
 export default {
   props: ['navs'],
   name: 'UploadImg',
@@ -191,8 +201,11 @@ export default {
       action: this.URLS + '/index.php/Home/Index/upfile',
       types: this.$store.state.user.types,
       projects: this.$store.state.user.projects,
+      minTypes: this.$store.state.user.minType,
+      minTypes2: this.$store.state.user.minType,
       typeImg: '',
       projectImg: '',
+      minTypeImg: '',
       psdImageUrlls: '',
       videoImageUrlls: '',
       article: {
@@ -226,11 +239,127 @@ export default {
           videoFile: [],
           videoImg: {size: '', name: '', url: '', type: '', File: {}}
         },
-        xname: ''
+        xname: '',
+        did: '',
+        dname: ''
       },
       uploadingFiles: [],
       deleteFiles: [],
-      release: false
+      release: false,
+      URLS2: this.URLS2
+    }
+  },
+  watch: {
+    projectImg: function (newQuestion, oldQuestion) {
+      console.log('projectImg')
+      this.minTypes2 = []
+      if (this.projectImg.length !== 0) {
+        let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+        let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        }
+      } else {
+        if (this.typeImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getTypesID(this, this.typeImg) === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    typeImg: function (newQuestion, oldQuestion) {
+      console.log('typeImg')
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.typeImg.length !== 0) {
+        if (this.projectImg.length !== 0) {
+          // this.minTypeImg = ''
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (tid === this.minTypes[i].tbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        }
+      } else {
+        if (this.projectImg.length !== 0) {
+          for (let i = 0; i < this.minTypes.length; i++) {
+            if (getProjectID(this, this.projectImg) === this.minTypes[i].pbid) {
+              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypeImg: function (newQuestion, oldQuestion) {
+      console.log(typeof getMinTypesID(this, this.minTypeImg))
+      this.minTypes2 = []
+      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+      if (this.minTypeImg.length !== 0) {
+        this.article.dname = this.minTypeImg
+        this.article.did = getMinTypesID(this, this.minTypeImg)
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypeImg === this.minTypes[i].dname) {
+            this.projectImg = getProjectName(this, this.minTypes[i].pbid)
+            this.typeImg = getTypesName(this, this.minTypes[i].tbid)
+            pid = this.minTypes[i].pbid
+            tid = this.minTypes[i].tbid
+          }
+        }
+        for (let i = 0; i < this.minTypes.length; i++) {
+          if (this.minTypes[i].pbid === pid && this.minTypes[i].tbid === tid) {
+            this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+          }
+        }
+      } else if (this.minTypeImg.length === 0) {
+        this.article.dname = ''
+        this.article.did === ''
+        if (this.projectImg.length !== 0) {
+          if (this.typeImg.length !== 0) {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          } else {
+            for (let i = 0; i < this.minTypes.length; i++) {
+              if (pid === this.minTypes[i].pbid) {
+                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+              }
+            }
+          }
+        } else {
+          this.minTypes2 = this.minTypes
+        }
+      }
+    },
+    minTypes2: function (newQuestion, oldQuestion) {
+      if (this.minTypes2.length === 0) {
+        this.minTypeImg = ''
+      }
     }
   },
   methods: {
@@ -438,7 +567,7 @@ export default {
         this.$alert('请选择项目类型', '警告', {confirmButtonText: '确定'})
       } else if (this.article.lname.length === 0) {
         this.$alert('请选择项目下的小类别', '警告', {confirmButtonText: '确定'})
-      } else if (this.article.describe.length === 0) {
+      } else if (this.article.dname.length === 0 && this.article.detailsid.length) {
         this.$alert('请填写描述内容', '警告', {confirmButtonText: '确定'})
       } else if (this.article.img.length === 0 && this.article.psd.psdFile.length === 0 && this.article.video.videoImg.url.length === 0 && this.article.video.videoFile.length === 0) {
         this.$alert('请添加需要上传的图片/PSD/视频文件', '警告', {confirmButtonText: '确定'})

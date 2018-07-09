@@ -84,5 +84,5 @@ export default {
 .usrtAdd dd input{float:left; width: 300px;}
 .usrtAdd dd samp{display: block;float:left;width:300px;height: 40px; line-height: 40px;font-size: 15px;color: #f00; padding-left: 10px;}
 .userAddTJ{padding: 0 15px; height: 38px; margin-left: 60px !important;}
-.userAddTJ span{display:block !important; width: 100% !important; line-height: 20px !important; height: 38px !important;}
+.userAddTJ span{display:block !important; width: 100% !important; line-height: 20px !important; height: 20px !important;}
 </style>
