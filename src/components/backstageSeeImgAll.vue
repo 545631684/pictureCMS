@@ -41,20 +41,20 @@
       <dl v-loading="loading" class="articleList clearfix" v-if="article.lenght !== 0">
         <dd v-for="(item, index) in article" :key="item.mId">
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 0">
-            <img :src="URLS2 + 'image/timg.jpg'" width="340" height="234" id="000"/>
+            <img v-lazy="URLS2 + 'image/timg.jpg'" width="340" height="234" id="000"/>
           </p>
           <p class="shrinkageImg1 clearfix" v-if="item.srcs.length === 1">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234" id="111"/>
+            <img v-lazy="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" width="340" height="234" id="111"/>
           </p>
           <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 2">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="222"/>
+            <img v-lazy="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="222"/>
           </p>
           <p class="shrinkageImg2 clearfix" v-else-if="item.srcs.length === 3">
-            <img :src="returnSrc(item.srcs[0])"  id="333"/>
-            <img :src="returnSrc(item.srcs[1])" />
+            <img v-lazy="returnSrc(item.srcs[0])"  id="333"/>
+            <img v-lazy="returnSrc(item.srcs[1])" />
           </p>
           <p class="shrinkageImg clearfix" v-else-if="item.srcs.length === 4">
-            <img :src="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="444"/>
+            <img v-lazy="returnSrc(items)" v-for="(items, index) in item.srcs" :key="index" id="444"/>
           </p>
           <p class="articleTime">
             <span>{{item.mId}}</span>
@@ -268,7 +268,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .ma10{margin-bottom: 10px;}
   .el-input--suffix{width: 200px !important;}
   .articleList{}

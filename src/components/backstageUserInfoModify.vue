@@ -122,7 +122,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .userInfo{width: 100%; height: auto;}
   .userInfo .headPortrait{display: block; margin:50px auto 10px; border-radius: 200px; width: 150px;height: 150px;}
   .userInfo .nick{text-align: center;}

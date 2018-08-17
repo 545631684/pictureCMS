@@ -24,9 +24,9 @@ Vue.use(VueLocalStorage)
 Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.config.productionTip = false
-Vue.prototype.URLS = 'http://img.doudouv.com/'
+Vue.prototype.URLS = ''
 // Vue.prototype.URLS = '/api'
-Vue.prototype.URLS2 = 'http://img.doudouv.com/'
+Vue.prototype.URLS2 = 'http://192.168.0.130/'
 
 /* eslint-disable no-new */
 new Vue({

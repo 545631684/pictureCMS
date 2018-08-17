@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "element-ui": "^2.3.3",
+    "element-ui": "^2.4.6",
     "fastclick": "^1.0.6",
     "qs": "^6.5.1",
     "vue": "^2.5.2",

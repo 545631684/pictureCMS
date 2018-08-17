@@ -204,7 +204,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #imgList .header{width: 100%; height: 97px; background:#087ada;}
 #imgList .content{width: 1000px; height: auto; margin: 0 auto;}
 #imgList .header .logo{width: 100%; height: 37px;background:#1a2c34;}

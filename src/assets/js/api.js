@@ -1557,7 +1557,7 @@ export function exhibitionDetails2 (_this, mid) {
           _this.mid = response.data.list.mId
           _this.title = response.data.list.title
           _this.describe = response.data.list.describe
-          _this.registerTime = response.data.list.registerTime
+          _this.registerTime = response.data.list.registerTimeImg
           _this.imgFile = response.data.list.img
           _this.psdFile = response.data.list.psd
           _this.videoFile = response.data.list.video

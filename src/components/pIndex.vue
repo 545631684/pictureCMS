@@ -249,7 +249,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #index .header{width: 100%; height: 550px; background: url(../assets/images/sq2.jpg) no-repeat; background-size: 100% 550px;}
 #index .content{width: 1000px; height: auto; margin: 0 auto;}
 #index .header .logo{width: 1000px; height: 30px; margin: 0 auto; padding: 5px 0;}

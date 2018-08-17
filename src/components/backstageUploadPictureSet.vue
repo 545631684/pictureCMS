@@ -355,7 +355,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .title{ width: 100%;}
   .title span{display: block;float: left;width: 10%; font-size: 18px; height: 40px; line-height: 40px; text-align: right;    padding-right: 20px;}
   .title span.true{display: block;float: left;color: #1afa29; width: 250px; line-height: 40px; text-align: left;}

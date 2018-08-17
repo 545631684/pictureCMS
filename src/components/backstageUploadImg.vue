@@ -92,14 +92,13 @@
           :before-upload="beforeAvatarUpload2"
           :on-change="obtainImgSrc">
           <img v-if="videoImageUrlls" :src="videoImageUrlls" class="avatar">
-          <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传视频缩略图（.jpg）</div>
+          <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传视频缩略图（.jpg）<br />大小不要超过2MB</div>
         </el-upload>
       </div>
       <div class="imgs" style="width: 20%;">
         <el-upload
           style="margin-top: 44px;"
-          :limit="100"
-          :multiple="true"
+          :limit="1"
           ref="videoFile"
           accept=".mp4,.flv"
           class="upload-demo"
@@ -107,7 +106,7 @@
           :on-remove="handleRemove3"
           :on-change="obtainImgSrc">
           <el-button size="small" type="primary">点击上传视频文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传视频格式文件，文件大小不要超过1GB<br />建议上传格式：.mp4、.flv （支持在线播放）</div>
+          <div slot="tip" class="el-upload__tip">只能上传视频格式文件，文件大小不要超过1GB<br />建议上传格式：.mp4（支持在线播放）<br />多个视频推荐使用<a href="http://www.aijianji.com/">爱剪辑</a>去拼接后上传</div>
         </el-upload>
       </div>
     </el-footer>
@@ -445,7 +444,7 @@ export default {
         this.$alert('请填写描述内容', '警告', {confirmButtonText: '确定'})
       } else if (this.imgCrsString.length === 0 && this.psd.psdFile.length === 0 && this.video.videoImg.url.length === 0 && this.video.videoFile.length === 0) {
         this.$alert('请添加需要上传的图片/PSD/视频文件', '警告', {confirmButtonText: '确定'})
-      } else if (this.psd.psdFile.length !== 0 && this.imgCrsString.length === 0) {
+      } else if (this.psd.psdFile.length !== 0 && this.imgCrss.length === 0) {
         this.$alert('请添加psd缩略图，在图片里添加', '警告', {confirmButtonText: '确定'})
       } else if (this.video.videoImg.url.length !== 0 && this.video.videoFile.length === 0) {
         this.$alert('请完整添加视频文件和缩略图', '警告', {confirmButtonText: '确定'})
@@ -507,7 +506,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .title{ width: 100%;}
   .title span{display: block;float: left;width: 10%; font-size: 18px; height: 40px; line-height: 40px; text-align: right;    padding-right: 20px;}
   .title span.true{display: block;float: left;color: #1afa29; width: 250px; line-height: 40px; text-align: left;}

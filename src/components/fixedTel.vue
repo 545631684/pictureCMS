@@ -41,7 +41,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 .fixedTel{position: fixed; width: 50px; height: 50px; right: 20px; bottom: 50px;}
 .fixedTel .tles{width: 0.734375rem; height: 2.3125rem; padding-bottom: .2rem}
 .fixedTel .fanhuitop{width: 50px; height: 50px;}

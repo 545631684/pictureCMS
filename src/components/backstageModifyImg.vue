@@ -139,7 +139,7 @@
       <div class="imgs" style="width: 20%;" v-if="!videoDiv">
         <el-upload
           class="avatar-uploader uploadImg"
-          :limit="20"
+          :limit="1"
           ref="videoImg"
           accept=".jpg,.png"
           :action="action + '?id=5'"
@@ -149,7 +149,7 @@
           :before-upload="beforeAvatarUpload2"
           :on-change="obtainImgSrc">
           <img v-if="videoImageUrlls" :src="videoImageUrlls" class="avatar">
-          <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传视频缩略图（.jpg/.png）</div>
+          <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传视频缩略图（.jpg）<br />大小不要超过2MB</div>
           <span class="el-upload-list__item-actions">
             <span class="el-upload-list__item-preview" @click="handlePictureCardPreview2(article.video.videoImg)"><i class="el-icon-zoom-in"></i></span>
             <span class="el-upload-list__item-delete" @click="handleRemove3(article.video.videoImg, article.video.videoFile[0].url, 'video')"><i class="el-icon-delete"></i></span>
@@ -167,7 +167,7 @@
           :on-remove="handleRemoveVideo"
           :on-change="obtainImgSrc">
           <el-button size="small" type="primary">点击上传视频文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传视频格式文件，文件大小不要超过1GB<br />建议上传格式：.mp4、.flv （支持在线播放）</div>
+          <div slot="tip" class="el-upload__tip">只能上传视频格式文件，文件大小不要超过1GB<br />建议上传格式：.mp4（支持在线播放）<br />多个视频推荐使用<a href="http://www.aijianji.com/">爱剪辑</a>去拼接后上传</div>
         </el-upload>
       </div>
     </el-footer>

@@ -130,7 +130,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .v-modal{ position: relative;}
   .upPwd{padding: 20px 10px;}
   .upPwd span{display: block;float: left;width: 20%; height: 40px;line-height: 40px; text-align: center;}

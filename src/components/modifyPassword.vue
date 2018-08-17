@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .xiugaimima{width: 750px;}
   .xiugaimima b{display: block;float: left; width: 130px; height: 40px;line-height: 40px; text-align: left;}
   .xiugaimima input{display: block;float: left;width: 200px;}

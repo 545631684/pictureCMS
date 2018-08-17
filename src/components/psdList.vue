@@ -204,7 +204,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #psdList .header{width: 100%; height: 97px; background:#087ada;}
 #psdList .content{width: 1000px; height: auto; margin: 0 auto;}
 #psdList .header .logo{width: 100%; height: 37px;background:#1a2c34;}
