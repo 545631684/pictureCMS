@@ -2,6 +2,13 @@
   <el-container>
     <el-header>
       <div class="tab clearfix">
+        <p>用户：</p>
+        <ul>
+          <li :class="{on:num4 === ''}" @click="tab4('', '全部', '')">全部</li>
+          <li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)">{{item.nickname}}</li>
+        </ul>
+      </div>
+      <div class="tab clearfix">
         <p>项目：</p>
         <ul>
           <li :class="{on:num1 === ''}" @click="tab1('', '全部', '')">全部</li>
@@ -77,10 +84,17 @@ export default {
       article: [],
       article2: [],
       article3: [],
+      userList: [],
       URLS2: this.URLS2,
       num1: '',
       num2: '',
       num3: '',
+      num4: '',
+      user: {
+        id: '',
+        name: '',
+        index: ''
+      },
       xname: {
         id: '',
         name: '',
@@ -100,7 +114,7 @@ export default {
       },
       showtype: true,
       currentPage1: 1,
-      dataList: 5,
+      dataList: 4,
       
     }
   },
@@ -198,6 +212,21 @@ export default {
       }
       this.setdata()
     },
+    tab4 (index, name, uid) {
+      console.log('进入小分类')
+      if (name !== '全部') {
+        this.num4 = index
+        this.user.id = uid
+        this.user.name = name
+        this.user.index = index
+      } else {
+        this.num4 = ''
+        this.user.id = ''
+        this.user.name = ''
+        this.user.index = ''
+      }
+      this.setdata()
+    },
     resetTab () {
       this.num1 = ''
       this.xname.id = ''
@@ -216,6 +245,9 @@ export default {
       this.setdata()
       this.showtype = true
     },
+    /**
+     * 选择分类动态修改，点击不同的项目、类型、小分类显示相应的类型和小分类
+     * */
     setdata () {
       console.log(this.dnames)
       this.minTypes2 = []
@@ -268,60 +300,50 @@ export default {
     getArticle (xid, tid, did) {
       this.article2 = []
       this.article3 = []
-      if (xid === '' && tid === '' && did === '') {
-        for (let h = 0; h < this.article.length; h++) {
-          this.$set(this.article2, this.article2.length, this.article[h])
-//        this.article2[this.article2.length] = this.article[h]
-        }
-      } else if (xid !== '' && tid === '' && did === '') {
-        for (let i = 0; i < this.article.length; i++) {
-          if (xid === this.article[i].projectid) {
-            this.$set(this.article2, this.article2.length, this.article[i])
-//          this.article2[this.article2.length] = this.article[i]
+      let condition = []
+      let tmpeList = []
+      this.user.id !== '' ? condition[0] = this.user.id:condition[0] = ''
+      this.xname.id !== '' ? condition[1] = this.xname.id:condition[1] = ''
+      this.lname.id !== '' ? condition[2] = this.lname.id:condition[2] = ''
+      this.dnames.did !== '' ? condition[3] = this.dnames.did:condition[3] = ''
+      if (condition[0] !== '') {
+        for (let b = 0; b < this.article.length; b++) {
+          if (condition[0] === this.article[b].uId) {
+            this.article2[this.article2.length] = this.article[b]
           }
         }
-      } else if (xid === '' && tid !== '' && did === '') {
-        for (let j = 0; j < this.article.length; j++) {
-          if (tid === this.article[j].typeid) {
-            this.$set(this.article2, this.article2.length, this.article[j])
-//          this.article2[this.article2.length] = this.article[j]
+      } else {
+        this.article2 = this.article
+      }
+      if (condition[1] !== '') {
+        tmpeList = this.article2
+        this.article2 = []
+        for (let b = 0; b < tmpeList.length; b++) {
+          if (condition[1] === tmpeList[b].projectid) {
+            this.article2[this.article2.length] = tmpeList[b]
           }
         }
-      } else if (xid === '' && tid === '' && did !== '') {
-        for (let k = 0; k < this.article.length; k++) {
-          if (did === this.article[k].detailsid) {
-            this.$set(this.article2, this.article2.length, this.article[k])
-//          this.article2[this.article2.length] = this.article[k]
+        tmpeList = []
+      }
+      if (condition[2] !== '') {
+        tmpeList = this.article2
+        this.article2 = []
+        for (let b = 0; b < tmpeList.length; b++) {
+          if (condition[2] === tmpeList[b].typeid) {
+            this.article2[this.article2.length] = tmpeList[b]
           }
         }
-      } else if (xid !== '' && tid !== '' && did === '') {
-        for (let l = 0; l < this.article.length; l++) {
-          if (xid === this.article[l].projectid && tid === this.article[l].typeid) {
-            this.$set(this.article2, this.article2.length, this.article[l])
-//          this.article2[this.article2.length] = this.article[l]
+        tmpeList = []
+      }
+      if (condition[3] !== '') {
+        tmpeList = this.article2
+        this.article2 = []
+        for (let b = 0; b < tmpeList.length; b++) {
+          if (condition[3] === tmpeList[b].detailsid) {
+            this.article2[this.article2.length] = tmpeList[b]
           }
         }
-      } else if (xid === '' && tid !== '' && did !== '') {
-        for (let m = 0; m < this.article.length; m++) {
-          if (did === this.article[m].detailsid && tid === this.article[m].typeid) {
-            this.$set(this.article2, this.article2.length, this.article[m])
-//          this.article2[this.article2.length] = this.article[m]
-          }
-        }
-      } else if (xid !== '' && tid === '' && did !== '') {
-        for (let n = 0; n < this.article.length; n++) {
-          if (did === this.article[n].detailsid && xid === this.article[n].projectid) {
-            this.$set(this.article2, this.article2.length, this.article[n])
-//          this.article2[this.article2.length] = this.article[n]
-          }
-        }
-      } else if (xid !== '' && tid !== '' && did !== '') {
-        for (let o = 0; o < this.article.length; o++) {
-          if (did === this.article[o].detailsid && xid === this.article[o].projectid && tid === this.article[o].typeid) {
-            this.$set(this.article2, this.article2.length, this.article[o])
-//          this.article2[this.article2.length] = this.article[o]
-          }
-        }
+        tmpeList = []
       }
       for (let o = 0; o < this.article2.length; o++) {
         if (o < this.dataList) {
@@ -360,6 +382,7 @@ export default {
   },
   created () {
     administrationArticleAll(this)
+    userList2(this)
   }
 }
 </script>

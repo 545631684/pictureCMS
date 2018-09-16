@@ -46,10 +46,10 @@
       <div class="fileList clearfix">
         <ul class="clearfix">
           <li v-for="(item, index) in imgList">
-            <router-link tag="a" class="" :to="'/article/' + currentP.name + '/img/' + item.mId" :title="item.title">
+            <router-link tag="a" class="" :to="'/article/' + currentP.name + '/img/' + item.mId" :title="item.title" target="_blank">
               <img class="fileImg" :src="getHeadPortraitSrc2(item.img[0].url)" alt="" v-if="item.img.length !== 0"/>
               <img class="fileImg" :src="URLS2 + 'image/timg.jpg'" alt="" v-else=""/>
-              <p>{{item.title}}</p>
+              <p class="omit" :title="item.title">{{item.title}}</p>
               <p>
                 <img class="userLogo" :src="getHeadPortraitSrc(item.HeadPortraitSrc)" alt="" />
                 <span>用户：{{item.nickname.length !== 0 ? item.nickname : item.userName}}<br />时间：{{formatDate(item.registerTimeImg)}}</span>
@@ -108,7 +108,7 @@ export default {
     imgList: function (newQuestion, oldQuestion) {
       this.count = this.imgList.length !== 0 ?  parseInt(this.imgList[0].count) : 0
       if (this.count !== 0) {
-        this.PageCount = parseInt(this.count / this.pageSize)
+        this.PageCount = parseInt((this.count / this.pageSize).toFixed()) + 1
       }
     },
     PList: function (newQuestion, oldQuestion) {
@@ -230,7 +230,7 @@ export default {
 #imgList .header .normal .land a{color: #FFFFFF; display: block; text-align: right; width: 100px; height: 12px; line-height: 12px; float: right; margin: 16px 0; text-align: center;}
 #imgList .header .normal .login a{border-right: 1px solid #fff;}
 /*#imgList .header .normal .land a:hover{border-bottom: 1px solid #FFFFFF;}*/
-#imgList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: auto;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
+#imgList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: 204px;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
 #imgList .header .normal .hideNav .project{position: relative;top: -44px;left: 0; width: 1000px; height: 50px; overflow: hidden;    background: #0873d6;}
 #imgList .header .normal .hideNav .project img{float: left; width: 50px; height: 50px;display: block;}
 #imgList .header .normal .hideNav .project ul{float: left; width: 950px; height: auto; min-height: 50px;}
@@ -238,7 +238,7 @@ export default {
 #imgList .header .normal .hideNav ul li a{color: #ffffff;}
 #imgList .header .normal .hideNav ul li a:hover{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
 #imgList .header .normal .hideNav ul li a.on{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
-#imgList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;}
+#imgList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;position: absolute;}
 #imgList .header .normal .tad dl{padding-left: 50px;}
 #imgList .header .normal .tad dl dd{float: left;width: 279px; height: 94px; margin: 30px 0;     margin-right: 37px; }
 #imgList .header .normal .tad dl dd a{display: block; width: 279px; height: 94px; line-height: 94px; font-size: 20px; color: #FFFFFF; text-indent: 1em;}

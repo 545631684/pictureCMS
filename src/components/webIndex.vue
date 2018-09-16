@@ -25,21 +25,21 @@
         </p>
         <dl>
           <dd>
-            <router-link tag="a" class="" to="/listImgAll" title="">
+            <router-link tag="a" class="" to="/listImgAll" title="" target="_blank">
               <img src="../assets/images/sq3.png" alt="" />
               <span v-if="imgList.length !== 0" v-html="'数量：' + imgList[0].count"></span>
               <span v-if="imgList.length === 0"><img src="../assets/images/loading.gif" alt="" /></span>
             </router-link>
           </dd>
           <dd>
-            <router-link tag="a" class="" to="/listPsdAll" title="">
+            <router-link tag="a" class="" to="/listPsdAll" title="" target="_blank">
               <img src="../assets/images/sq4.png" alt="" />
               <span v-if="psdList.length !== 0" v-html="'数量：' + psdList[0].count"></span>
               <span v-if="psdList.length === 0"><img src="../assets/images/loading.gif" alt="" /></span>
             </router-link>
           </dd>
           <dd>
-            <router-link tag="a" class="" to="/listVideoAll" title="">
+            <router-link tag="a" class="" to="/listVideoAll" title="" target="_blank">
               <img src="../assets/images/sq5.png" alt="" />
               <span v-if="videoList.length !== 0" v-html="'数量：' + videoList[0].count"></span>
               <span v-if="videoList.length === 0"><img src="../assets/images/loading.gif" alt="" /></span>
@@ -62,12 +62,12 @@
       -->
       <div class="tileType content">
         <p><img src="../assets/images/sq6.png" alt="" />图片集</p>
-        <router-link tag="a" class="" to="/listImgAll" title=""><img src="../assets/images/sq9.png" alt="" />更多</router-link>
+        <router-link tag="a" class="" to="/listImgAll" title="" target="_blank"><img src="../assets/images/sq9.png" alt="" />更多</router-link>
       </div>
       <div class="files content">
         <dl v-if="imgList.length !== 0">
           <dd v-for="(item, index) in imgList" v-if='index <= 2' >
-            <router-link tag="a" class="articleInfo" :to="'/article/index/imgAll/' + item.mId" :title="item.title">
+            <router-link tag="a" class="articleInfo" :to="'/article/index/imgAll/' + item.mId" :title="item.title" target="_blank">
               <span class="omit">{{item.title}}</span>
               <span>{{formatDate(item.registerTimeImg)}}</span>
               <span :class="{on:item.nickname.length !== 0 ? true : false}">
@@ -91,12 +91,12 @@
       -->
       <div class="tileType content">
         <p><img src="../assets/images/sq7.png" alt="" />PSD文件</p>
-        <router-link tag="a" class="" to="/listPsdAll" title=""><img src="../assets/images/sq9.png" alt="" />更多</router-link>
+        <router-link tag="a" class="" to="/listPsdAll" title="" target="_blank"><img src="../assets/images/sq9.png" alt="" />更多</router-link>
       </div>
       <div class="files content">
         <dl v-if="psdList.length !== 0">
           <dd v-for="(item, index) in psdList" v-if='index <= 2'>
-            <router-link tag="a" class="articleInfo" :to="'/article/index/psdAll/' + item.mId" :title="item.title">
+            <router-link tag="a" class="articleInfo" :to="'/article/index/psdAll/' + item.mId" :title="item.title" target="_blank">
               <span class="omit">{{item.title}}</span>
               <span>{{formatDate(item.registerTimeImg)}}</span>
               <span :class="{on:item.nickname.length !== 0 ? true : false}">
@@ -121,15 +121,15 @@
       -->
       <div class="tileType content">
         <p><img src="../assets/images/sq8.png" alt="" />视频文件</p>
-        <router-link tag="a" class="" to="/listVideoAll" title=""><img src="../assets/images/sq9.png" alt="" />更多</router-link>
+        <router-link tag="a" class="" to="/listVideoAll" title="" target="_blank"><img src="../assets/images/sq9.png" alt="" />更多</router-link>
       </div>
       <div class="content videoFile">
         <dl v-if="videoList.length !== 0">
           <dd v-for="(item, index) in videoList" v-if='index <= 1'>
             <!--<router-link tag="a" class="" to="/" title=""><img class="videoFileImg" src="../assets/images/sq13.jpg" alt="" /></router-link>-->
-            <router-link tag="a" class="" :to="'/article/index/videoAll/' + item.mId" :title="item.title"><img class="videoFileImg" :src="getHeadPortraitSrc(item.video.videoImg.url)" alt="" /></router-link>
+            <router-link tag="a" class="" :to="'/article/index/videoAll/' + item.mId" :title="item.title" target="_blank"><img class="videoFileImg" :src="getHeadPortraitSrc(item.video.videoImg.url)" alt="" /></router-link>
             <p>
-              <span>{{item.title}}</span>
+              <span class="omit" :title="item.title">{{item.title}}</span>
               <img class="userLogo" :src="getHeadPortraitSrc(item.HeadPortraitSrc)" alt="" />
               <span>{{item.nickname.length !== 0 ? item.nickname : item.userName}}</span>
               <span>{{formatDate(item.registerTimeImg)}}</span>

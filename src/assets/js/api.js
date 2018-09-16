@@ -1481,7 +1481,7 @@ export function exhibitionAllimg (_this, queryInfo) {
         if (_this.imgList.length === 0) {
           _this.imgList = response.data
         } else {
-          for (let i = 0; i <= response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             if (i < _this.pageSize) {
               _this.$set(_this.imgList, _this.imgList.length, response.data[i])
             }
@@ -1506,7 +1506,7 @@ export function exhibitionAllpsd (_this, queryInfo) {
         if (_this.psdList.length === 0) {
           _this.psdList = response.data
         } else {
-          for (let i = 0; i <= response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             if (i < _this.pageSize) {
               _this.$set(_this.psdList, _this.psdList.length, response.data[i])
             }
@@ -1531,7 +1531,7 @@ export function exhibitionAllvideo (_this, queryInfo) {
         if (_this.videoList.length === 0) {
           _this.videoList = response.data
         } else {
-          for (let i = 0; i <= response.data.length; i++) {
+          for (let i = 0; i < response.data.length; i++) {
             if (i < _this.pageSize) {
               _this.$set(_this.videoList, _this.videoList.length, response.data[i])
             }

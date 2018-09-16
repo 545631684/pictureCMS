@@ -30,7 +30,7 @@
         // 获取当前最外围document的scrollTop，返回顶部
         var timer = setInterval(function() {
           var top = document.body.scrollTop || document.documentElement.scrollTop
-          var speed = Math.ceil(top / 5)
+          var speed = Math.ceil(top / 10)
           document.body.scrollTop = document.documentElement.scrollTop = top - speed
           if (top === 0) {
             clearInterval(timer)

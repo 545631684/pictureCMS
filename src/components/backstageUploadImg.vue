@@ -3,7 +3,7 @@
     <el-footer>
       <div class="title" >
         <span>标题：</span>
-        <el-input placeholder="请输入标题" v-model="title" clearable v-on:blur="titleRepeat"></el-input>
+        <el-input placeholder="请输入标题" v-model="title" clearable v-on:blur="titleRepeat" style="width: 455px !important;"></el-input>
         <span class="true" v-if="titleCf && titleDiv"><img src="../assets/images/true.png" alt="" />没有重复，可正常使用</span>
         <span class="fales" v-if="!titleCf && titleDiv"><img src="../assets/images/fales.png" alt="" />标题重复，请重新填写</span>
       </div>

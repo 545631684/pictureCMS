@@ -46,10 +46,10 @@
       <div class="fileList clearfix">
         <ul class="clearfix">
           <li v-for="(item, index) in psdList">
-            <router-link tag="a" class="" :to="'/article/index/psdAll/' + item.mId" :title="item.title">
+            <router-link tag="a" class="" :to="'/article/index/psdAll/' + item.mId" :title="item.title" target="_blank">
               <img class="fileImg" :src="getHeadPortraitSrc2(item.img[0].url)" alt="" v-if="item.img.length !== 0"/>
               <img class="fileImg" :src="URLS2 + 'image/timg.jpg'" alt="" v-else=""/>
-              <p>{{item.title}}</p>
+              <p class="omit" :title="item.title">{{item.title}}</p>
               <p>
                 <img class="userLogo" :src="getHeadPortraitSrc(item.HeadPortraitSrc)" alt="" />
                 <span>用户：{{item.nickname.length !== 0 ? item.nickname : item.userName}}<br />时间：{{formatDate(item.registerTimeImg)}}</span>
@@ -220,7 +220,7 @@ export default {
 #psdList .header .normal .land a{color: #FFFFFF; display: block; text-align: right; width: 100px; height: 12px; line-height: 12px; float: right; margin: 16px 0; text-align: center;}
 #psdList .header .normal .login a{border-right: 1px solid #fff;}
 /*#psdList .header .normal .land a:hover{border-bottom: 1px solid #FFFFFF;}*/
-#psdList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: auto;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
+#psdList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: 204px;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
 #psdList .header .normal .hideNav .project{position: relative;top: -44px;left: 0; width: 1000px; height: 50px; overflow: hidden;    background: #0873d6;}
 #psdList .header .normal .hideNav .project img{float: left; width: 50px; height: 50px;display: block;}
 #psdList .header .normal .hideNav .project ul{float: left; width: 950px; height: auto; min-height: 50px;}
@@ -228,7 +228,7 @@ export default {
 #psdList .header .normal .hideNav ul li a{color: #ffffff;}
 #psdList .header .normal .hideNav ul li a:hover{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
 #psdList .header .normal .hideNav ul li a.on{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
-#psdList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;}
+#psdList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;position: absolute;}
 #psdList .header .normal .tad dl{padding-left: 50px;}
 #psdList .header .normal .tad dl dd{float: left;width: 279px; height: 94px; margin: 30px 0;     margin-right: 37px; }
 #psdList .header .normal .tad dl dd a{display: block; width: 279px; height: 94px; line-height: 94px; font-size: 20px; color: #FFFFFF; text-indent: 1em;}

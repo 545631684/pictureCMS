@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-footer>
+    <el-footer style="height: auto;">
       <p class="titleType">
         <b>小分类<button class="el-button el-button--primary el-button--small" style="margin-left: 20px;" size="mini" @click="firing('', '1')">添加小分类</button></b>
         <el-dialog
@@ -33,9 +33,30 @@
           </span>
         </el-dialog>
       </p>
+      <p class="titleType">
+        <b style="display: block;">
+                  查询：
+          <el-select v-model="queryProjectName" filterable clearable placeholder="项目">
+            <el-option
+                v-for="item in projects"
+                :key="item.pid"
+                :label="item.xname"
+                :value="item.xname">
+              </el-option>
+          </el-select>
+          <el-select v-model="queryTypeName" filterable clearable placeholder="分类">
+            <el-option
+                v-for="item in types"
+                :key="item.tid"
+                :label="item.lname"
+                :value="item.lname">
+              </el-option>
+          </el-select>
+        </b>
+      </p>
     </el-footer>
     <el-footer style="height: auto;" >
-      <el-table :data="minType" style="width: 850px; float: left;" v-loading="loadingList" >
+      <el-table :data="minType3" style="width: 900px; float: left;" v-loading="loadingList" >
         <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
         <el-table-column prop="pbid" label="项目名称" width="100" align="center">
           <template scope="scope">
@@ -47,7 +68,7 @@
             {{getTypesName(scope.row.tbid)}}
           </template>
         </el-table-column>
-        <el-table-column prop="dname" label="小类型名称" width="100" align="center"></el-table-column>
+        <el-table-column prop="dname" label="小类型名称" width="150" align="center"></el-table-column>
         <el-table-column prop="states" label="小类型状态" width="100" align="center">
           <template scope="scope">
             <span v-bind:style="{color: (scope.row.states === true ? '#13ce66' : '#ff4949')}">{{ typeHTML(scope.row.states) }}</span>
@@ -109,6 +130,16 @@
         </el-table-column>
       </el-table>
     </el-footer>
+    <div class="block" style="width: 470px;margin: 0 0 0 20%;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage1"
+        :page-size="dataList"
+        layout="total, prev, pager, next"
+        :total="minType2.length">
+      </el-pagination>
+    </div>
   </el-container>
 </template>
 
@@ -122,6 +153,8 @@ export default {
       types: this.$store.state.user.types || [],
       projects: this.$store.state.user.projects || [],
       minType: [],
+      minType2: [],
+      minType3: [],
       uId: '',
       title: '',
       name: '',
@@ -132,10 +165,32 @@ export default {
       loadingList: false,
       projectName: '',
       typeName: '',
-      dname: ''
+      dname: '',
+      currentPage1: 1,
+      dataList: 10,
+      queryProjectName: '',
+      queryTypeName: ''
     }
   },
   watch: {
+    queryProjectName: function (newQuestion, oldQuestion) {
+      this.getMixType()
+    },
+    queryTypeName: function (newQuestion, oldQuestion) {
+      this.getMixType()
+    },
+    minType: function (newQuestion, oldQuestion) {
+      this.minType2 = []
+      this.minType3 = []
+      this.minType2 = this.minType
+      if (this.minType.length !== 0) {
+        for (let o = 0; o < this.minType.length; o++) {
+          if (o < this.dataList) {
+            this.$set(this.minType3, this.minType3.length, this.minType[o])
+          }
+        }
+      }
+    },
     mixTypeModify: function (newQuestion, oldQuestion) {
       if (this.mixTypeModify === false) {
         this.dname = ''
@@ -150,6 +205,57 @@ export default {
     }
   },
   methods: {
+    getMixType() {
+      this.minType2 = []
+      this.minType3 = []
+      let condition = []
+      let tmpeList = []
+      this.queryProjectName !== '' ? condition[0] = this.getProjectID(this.queryProjectName):condition[0] = ''
+      this.queryTypeName !== '' ? condition[1] = this.getTypesID(this.queryTypeName):condition[1] = ''
+      if (condition[0] !== '') {
+        for (let b = 0; b < this.minType.length; b++) {
+          if (condition[0] === this.minType[b].pbid) {
+            this.minType2[this.minType2.length] = this.minType[b]
+          }
+        }
+      } else {
+        this.minType2 = this.minType
+      }
+      
+      if (condition[1] !== '') {
+        tmpeList = this.minType2
+        this.minType2 = []
+        for (let b = 0; b < tmpeList.length; b++) {
+          if (condition[1] === tmpeList[b].tbid) {
+            this.minType2[this.minType2.length] = tmpeList[b]
+          }
+        }
+        tmpeList = []
+      }
+      for (let o = 0; o < this.minType2.length; o++) {
+        if (o < this.dataList) {
+          this.$set(this.minType3, this.minType3.length, this.minType2[o])
+        }
+      }
+    },
+    handleSizeChange(val) {
+      console.log('每页 ' + val + '条');
+    },
+    handleCurrentChange(val) {
+      console.log('当前页: ' + val)
+      // 抓取数据下标开始位置
+      let begin = (this.dataList * val) - this.dataList
+      // 抓取数据下标开结束位置
+      let end = (this.dataList * val) - 1
+      // 清空当前页显示数据
+      this.minType3 = []
+      // 循环抓取从起始位置到结束位置的数据
+      for (let o = 0; o < this.minType2.length; o++) {
+        if (o >= begin && o <= end) {
+          this.$set(this.minType3, this.minType3.length, this.minType2[o])
+        }
+      }
+    },
     typeHTML (state) {
       return state === true ? '启用' : '禁用'
     },
@@ -271,5 +377,5 @@ export default {
 <style>
   .v-modal{ position: relative !important;}
   .titleType{height: 60px;line-height: 60px; text-align: left;}
-  .titleType b{display: block;float: left; width: 50%; height: 60px; line-height: 60px; font-size: 20px;}
+  .titleType b{display: block;float: left; width: 100%; height: 60px; line-height: 60px; font-size: 20px;}
 </style>

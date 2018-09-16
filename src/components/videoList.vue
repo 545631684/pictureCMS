@@ -46,9 +46,9 @@
       <div class="fileList clearfix">
         <ul class="clearfix">
           <li v-for="(item, index) in videoList">
-            <router-link tag="a" class="" :to="'/article/index/videoAll/' + item.mId" :title="item.title">
+            <router-link tag="a" class="" :to="'/article/index/videoAll/' + item.mId" :title="item.title" target="_blank">
               <img class="fileImg" :src="getHeadPortraitSrc2(item.video.videoImg.url)" alt=""/>
-              <p>{{item.title}}</p>
+              <p class="omit" :title="item.title">{{item.title}}</p>
               <p>
                 <img class="userLogo" :src="getHeadPortraitSrc(item.HeadPortraitSrc)" alt="" />
                 <span>用户：{{item.nickname.length !== 0 ? item.nickname : item.userName}}<br />时间：{{formatDate(item.registerTimeImg)}}</span>
@@ -219,7 +219,7 @@ export default {
 #videoList .header .normal .land a{color: #FFFFFF; display: block; text-align: right; width: 100px; height: 12px; line-height: 12px; float: right; margin: 16px 0; text-align: center;}
 #videoList .header .normal .login a{border-right: 1px solid #fff;}
 /*#videoList .header .normal .land a:hover{border-bottom: 1px solid #FFFFFF;}*/
-#videoList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: auto;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
+#videoList .header .normal .hideNav{position: relative; top: -3px; left: 0; background: #30414b; height: 204px;-moz-box-shadow:0px 0px 8px #172C54; -webkit-box-shadow:0px 0px 8px #172C54; box-shadow:0px 0px 8px #172C54;}
 #videoList .header .normal .hideNav .project{position: relative;top: -44px;left: 0; width: 1000px; height: 50px; overflow: hidden;    background: #0873d6;}
 #videoList .header .normal .hideNav .project img{float: left; width: 50px; height: 50px;display: block;}
 #videoList .header .normal .hideNav .project ul{float: left; width: 950px; height: auto; min-height: 50px;}
@@ -227,7 +227,7 @@ export default {
 #videoList .header .normal .hideNav ul li a{color: #ffffff;}
 #videoList .header .normal .hideNav ul li a:hover{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
 #videoList .header .normal .hideNav ul li a.on{border-bottom: 2px solid #FFFFFF;color: #FFFFFF; padding-bottom: 8px;}
-#videoList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;}
+#videoList .header .normal .tad{width: 100%; height: auto;background: #30414b;    margin-top: -44px;position: absolute;}
 #videoList .header .normal .tad dl{padding-left: 50px;}
 #videoList .header .normal .tad dl dd{float: left;width: 279px; height: 94px; margin: 30px 0;     margin-right: 37px; }
 #videoList .header .normal .tad dl dd a{display: block; width: 279px; height: 94px; line-height: 94px; font-size: 20px; color: #FFFFFF; text-indent: 1em;}

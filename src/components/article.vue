@@ -40,7 +40,7 @@
                 <a v-if="imgDiv"><img src="../assets/images/pic_1.jpg"/></a>
                 <a v-if="psdDiv"><img src="../assets/images/psd_1.jpg"/></a>
                 <a v-if="videoDiv"><img src="../assets/images/vid_4.jpg"/></a>
-                <a href="" class="tit">{{title}}</a>
+                <a class="tit">{{title}}</a>
               </li>
               <li><a>{{formatDate(registerTime)}}</a></li>
                 <li><a :href="navPnameSrc">{{navPname}}</a>/<a :href="navTnameSrc">{{navTname}}</a>/<a class="blue">{{title}}</a></li>
@@ -296,7 +296,7 @@ export default {
             this.pid = this.PList[i].pid
           }
           if (i === this.PList.length - 1) {
-            this.navPnameSrc = this.URLS2 + '#/pindex/' + name + '/' + this.pid
+            this.navPnameSrc = this.URLS2 + '#/project/' + name + '/' + this.pid
           }
         }
       }
