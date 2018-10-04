@@ -1719,3 +1719,18 @@ export function detailssave (_this, did, pbid, tbid, dname) {
       console.log(error)
     })
 }
+
+// backstageRightIndex.vue 接口 统计当前7天的上传数据
+export function Statistics (_this) {
+  Axios.get(_this.URLS + '/index.php/Home/Index/Statistics')
+    .then(function (response) {
+      for (let o = 1; o < 8; o++) {
+      	_this.tj4data[_this.tj4data.length] = response.data[o].date
+      	_this.tj4time[_this.tj4time.length] = parseInt(response.data[o].counts)
+      }
+      _this.drawLine()
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}

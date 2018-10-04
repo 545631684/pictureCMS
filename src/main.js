@@ -25,8 +25,8 @@ Vue.use(VueLocalStorage)
 Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.config.productionTip = false
-// Vue.prototype.URLS = ''
-Vue.prototype.URLS = '/api'
+Vue.prototype.URLS = ''
+// Vue.prototype.URLS = '/api'
 Vue.prototype.URLS2 = 'http://192.168.0.130/'
 Vue.prototype.$echarts = echarts
 /* eslint-disable no-new */

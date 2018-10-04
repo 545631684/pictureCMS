@@ -53,7 +53,7 @@
 
 <script>
 import { formatDate } from '../assets/js/publicAPI'
-import { administrationArticleAll, administrationArticleQuery, delArticle2, userList2 } from '../assets/js/api'
+import { administrationArticleAll, administrationArticleQuery, delArticle2, userList2, detailsDisable, Statistics } from '../assets/js/api'
 export default {
   name: 'BackstageRightIndex',
   data () {
@@ -62,7 +62,17 @@ export default {
       permissions: this.$store.state.user.permissions,
       endTime: this.$store.state.user.endTime,
       article: [],
-      userList: []
+      userList: [],
+      tj4data: [],
+      tj4time: []
+    }
+  },
+  watch: {
+  	tj4data: function (newQuestion, oldQuestion) {
+  		console.log('健康')
+  		if (this.tj4data.length !== 0) {
+  			this.drawLine()
+  		}
     }
   },
   mounted(){
@@ -87,11 +97,11 @@ export default {
           tooltip: {},
           xAxis: {
               type: 'category',
-              data: ['2018-08-10', '2018-08-11', '2018-08-12', '2018-08-13', '2018-08-14', '2018-08-15', '2018-08-16']
+              data: this.tj4data
           },
           yAxis: {},
           series: [{
-              data: [820, 932, 901, 934, 1290, 1330, 1320],
+              data: this.tj4time,
               type: 'line',
               symbolSize: 20
           }]
@@ -109,6 +119,7 @@ export default {
   created () {
     administrationArticleAll(this)
     userList2(this)
+    Statistics(this)
   }
 }
 </script>

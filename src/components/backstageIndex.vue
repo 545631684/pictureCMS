@@ -33,7 +33,7 @@
             <dd v-if="permissions === '2'" :class="{on:navs.minType}" v-on:click.stop="navSwitch('minType')">小分类管理</dd>
           </dl>
         </el-aside>
-        <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;overflow-x:hidden">
+        <el-main direction="vertical" style="height: 943px !important; overflow:hidden;overflow:scroll;overflow-x:hidden;padding: 5px;">
           <UploadImg v-if="navs.uploadImg" :navs="navs"></UploadImg>
           <BackstageRightIndex v-if="navs.rightIndex"></BackstageRightIndex>
           <BackstageModifyImg v-if="navs.modifyImg" :navs="navs"></BackstageModifyImg>
