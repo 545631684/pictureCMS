@@ -8,15 +8,15 @@
           :visible.sync="mixTypeAdd"
           width="35%"
           center>
-          <p class="">
-            <el-select class="ma10" v-model="projectName" placeholder="项目" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
+          <p class="clearfix" style="width: 65%;margin: 0 auto;">
+            <!--<el-select class="ma10" v-model="projectName" placeholder="项目" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
               <el-option
                 v-for="item in projects"
                 :key="item.pid"
                 :label="item.xname"
                 :value="item.xname">
               </el-option>
-            </el-select>
+            </el-select>-->
             <el-select class="ma10" v-model="typeName" placeholder="分类" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
               <el-option
                 v-for="item in types"
@@ -25,7 +25,7 @@
                 :value="item.lname">
               </el-option>
             </el-select>
-            <input style="float: right;width: 150px;" class="el-input__inner" placeholder="小分类" type="text" name="" id="" value="" v-model="name" @keyup.enter="handleUpdate(scope.$index, scope.row, '1')"/>
+            <input style="width: 150px;" class="el-input__inner" placeholder="小分类" type="text" name="" id="" value="" v-model="name" @keyup.enter="handleUpdate(scope.$index, scope.row, '1')"/>
           </p>
           <span slot="footer" class="dialog-footer">
             <el-button @click="cancel('3')">取 消</el-button>
@@ -33,7 +33,7 @@
           </span>
         </el-dialog>
       </p>
-      <p class="titleType">
+      <!--<p class="titleType">
         <b style="display: block;">
                   查询：
           <el-select v-model="queryProjectName" filterable clearable placeholder="项目">
@@ -53,16 +53,16 @@
               </el-option>
           </el-select>
         </b>
-      </p>
+      </p>-->
     </el-footer>
     <el-footer style="height: auto;" >
       <el-table :data="minType3" style="width: 900px; float: left;" v-loading="loadingList" >
         <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
-        <el-table-column prop="pbid" label="项目名称" width="100" align="center">
+        <!--<el-table-column prop="pbid" label="项目名称" width="100" align="center">
           <template scope="scope">
             {{getProjectName(scope.row.pbid)}}
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column prop="tbid" label="类型名称" width="100" align="center">
           <template scope="scope">
             {{getTypesName(scope.row.tbid)}}
@@ -103,14 +103,14 @@
               width="35%"
               center>
               <p class="">
-                <el-select class="ma10" v-model="projectName" placeholder="项目" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
+                <!--<el-select class="ma10" v-model="projectName" placeholder="项目" filterable clearable style="width:200px; color: #409eff;margin-left: 20px;">
                   <el-option
                     v-for="item in projects"
                     :key="item.pid"
                     :label="item.xname"
                     :value="item.xname">
                   </el-option>
-                </el-select>
+                </el-select>-->
                 <el-select class="ma10" v-model="typeName" placeholder="分类" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
                   <el-option
                     v-for="item in types"
@@ -277,8 +277,8 @@ export default {
       if (this.dname.length === 0) {
         this.$alert('修改的名称不能为空', '警告', {confirmButtonText: '确定'})
       } else {
-        console.log(index + ",项目id：" + this.row.pbid + "，类型id：" + this.row.tbid + ",小分类id：" + this.row.did + ",小分类名称：" + this.row.dname)
-        detailssave(this, this.row.did, this.row.pbid, this.row.tbid, this.dname)
+//      console.log(index + ",项目id：" + this.row.pbid + "，类型id：" + this.row.tbid + ",小分类id：" + this.row.did + ",小分类名称：" + this.row.dname)
+        detailssave(this, this.row.did, 0, this.row.tbid, this.dname)
       }
     },
     firing (row, id) {
@@ -293,7 +293,7 @@ export default {
         this.projectName = this.getProjectName(this.row.pbid)
         this.typeName = this.getTypesName(this.row.tbid)
         this.name = this.row.dname
-        this.title = '修改小类型名称（' + row.dname + '）的项目和类型：'
+        this.title = '修改小类型名称（' + row.dname + '）的类型：'
         this.mixTypeModifyUp = true
       }
     },
@@ -312,21 +312,15 @@ export default {
     addName () {
       if (this.name.length === 0) {
         this.$alert('添加的小类型不能为空', '警告', {confirmButtonText: '确定'})
-      } else if (this.projectName.length === 0) {
-        this.$alert('请选择项目名称', '警告', {confirmButtonText: '确定'})
-      } else if (this.typeName.length === 0) {
-        this.$alert('请选择类型名称', '警告', {confirmButtonText: '确定'})
       } else {
-        detailsAdd(this, this.name, this.getProjectID(this.projectName), this.getTypesID(this.typeName))
+        detailsAdd(this, this.name, 0, this.getTypesID(this.typeName))
       }
     },
     modifyUpType () {
-      if (this.projectName.length === 0) {
-        this.$alert('请选择项目名称', '警告', {confirmButtonText: '确定'})
-      } else if (this.typeName.length === 0) {
+      if (this.typeName.length === 0) {
         this.$alert('请选择类型名称', '警告', {confirmButtonText: '确定'})
       } else {
-        detailssave(this, this.row.did, this.getProjectID(this.projectName), this.getTypesID(this.typeName), this.row.dname)
+        detailssave(this, this.row.did, 0, this.getTypesID(this.typeName), this.row.dname)
         // console.log('小类型：' + this.name + '，项目：' + this.getProjectID(this.projectName) + '，类型：' + this.getTypesID(this.typeName))
       }
     },

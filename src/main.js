@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -25,8 +26,8 @@ Vue.use(VueLocalStorage)
 Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.config.productionTip = false
-Vue.prototype.URLS = ''
-// Vue.prototype.URLS = '/api'
+// Vue.prototype.URLS = ''
+Vue.prototype.URLS = '/api'
 Vue.prototype.URLS2 = 'http://192.168.0.130/'
 Vue.prototype.$echarts = echarts
 /* eslint-disable no-new */

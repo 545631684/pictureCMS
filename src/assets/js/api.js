@@ -623,6 +623,7 @@ export function recoveryArticleAll (_this) {
   let uid = _this.$store.state.user.permissions === '1' ? _this.$store.state.user.uId : ''
   let pid = _this.projectImg.length === 0 ? '' : _this.projectImg
   let tid = _this.typeImg.length === 0 ? '' : _this.typeImg
+  let did = _this.minTypeImg.length === 0 ? '' : _this.minTypeImg
   if (_this.$store.state.user.permissions === '2') {
     for (let j = 0; j < _this.userList.length; j++) {
       if (_this.userList[j].nickname === _this.userName) {
@@ -644,7 +645,14 @@ export function recoveryArticleAll (_this) {
       }
     }
   }
-  Axios.get(_this.URLS + '/index.php/Home/Index/exhibitionrecovery?permissions=' + _this.$store.state.user.permissions + '&uId=' + uid + '&title=' + _this.searchTXT + '&pId=' + pid + '&tId=' + tid)
+  if (did !== '') {
+    for (let j = 0; j < _this.minTypes.length; j++) {
+      if (_this.minTypes[j].dname === did) {
+        did = _this.minTypes[j].did
+      }
+    }
+  }
+  Axios.get(_this.URLS + '/index.php/Home/Index/exhibitionrecovery?permissions=' + _this.$store.state.user.permissions + '&uId=' + uid + '&title=' + _this.searchTXT + '&pid=' + pid + '&tid=' + tid + '&did=' + did)
     .then(function (response) {
       _this.loading = true
       // console.log(response.data)
@@ -698,6 +706,7 @@ export function userArticleQuery (_this) {
   let title = _this.searchTXT.length === 0 ? '' : _this.searchTXT
   let pid = _this.projectImg.length === 0 ? '' : _this.projectImg
   let tid = _this.typeImg.length === 0 ? '' : _this.typeImg
+  let did = _this.minTypeImg.length === 0 ? '' : _this.minTypeImg
   if (pid !== '') {
     for (let j = 0; j < _this.projects.length; j++) {
       if (_this.projects[j].xname === pid) {
@@ -712,8 +721,15 @@ export function userArticleQuery (_this) {
       }
     }
   }
+  if (did !== '') {
+    for (let j = 0; j < _this.minTypes.length; j++) {
+      if (_this.minTypes[j].dname === did) {
+        did = _this.minTypes[j].did
+      }
+    }
+  }
   // console.log('/index.php/Home/Index/exhibition?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + _this.$store.state.user.uId)
-  Axios.get(_this.URLS + '/index.php/Home/Index/exhibition?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + _this.$store.state.user.uId)
+  Axios.get(_this.URLS + '/index.php/Home/Index/exhibition?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + _this.$store.state.user.uId + '&did=' + did)
     .then(function (response) {
       // console.log(response.data)
       let srcs = []
@@ -764,6 +780,7 @@ export function administrationArticleQuery (_this) {
   let pid = _this.projectImg.length === 0 ? '' : _this.projectImg
   let tid = _this.typeImg.length === 0 ? '' : _this.typeImg
   let uid = _this.userName.length === 0 ? '' : _this.userName
+  let did = _this.minTypeImg.length === 0 ? '' : _this.minTypeImg
   if (pid !== '') {
     for (let j = 0; j < _this.projects.length; j++) {
       if (_this.projects[j].xname === pid) {
@@ -785,8 +802,15 @@ export function administrationArticleQuery (_this) {
       }
     }
   }
+  if (did !== '') {
+    for (let j = 0; j < _this.minTypes.length; j++) {
+      if (_this.minTypes[j].dname === did) {
+        did = _this.minTypes[j].did
+      }
+    }
+  }
   // console.log('/index.php/Home/Index/exhibitionguanli?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + uid)
-  Axios.get(_this.URLS + '/index.php/Home/Index/exhibitionguanli?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + uid)
+  Axios.get(_this.URLS + '/index.php/Home/Index/exhibitionguanli?title=' + title + '&pid=' + pid + '&tid=' + tid + '&uId=' + uid + '&did=' + did)
     .then(function (response) {
       console.log(response.data)
       let srcs = []

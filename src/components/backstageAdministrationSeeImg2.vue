@@ -252,15 +252,9 @@ export default {
       console.log(this.dnames)
       this.minTypes2 = []
       if (this.xname.id === '' && this.lname.id === '' && this.dnames.did === '') {
-        for (let a = 0; a < this.minTypes.length; a++) {
-          this.minTypes2[this.minTypes2.length] = this.minTypes[a]
-        }
+				this.minTypes2 = this.minTypes
       } else if (this.xname.id !== '' && this.lname.id === '' && this.dnames.did === '') {
-        for (let b = 0; b < this.minTypes.length; b++) {
-          if (this.xname.id === this.minTypes[b].pbid) {
-            this.minTypes2[this.minTypes2.length] = this.minTypes[b]
-          }
-        }
+        this.minTypes2 = this.minTypes
       } else if (this.xname.id === '' && this.lname.id !== '' && this.dnames.did === '') {
         for (let c = 0; c < this.minTypes.length; c++) {
           if (this.lname.id === this.minTypes[c].tbid) {
@@ -272,7 +266,7 @@ export default {
         this.minTypes2 = this.minTypes
       } else if (this.xname.id !== '' && this.lname.id !== '' && this.dnames.did === '') {
         for (let d = 0; d < this.minTypes.length; d++) {
-          if (this.xname.id === this.minTypes[d].pbid && this.lname.id === this.minTypes[d].tbid) {
+          if (this.lname.id === this.minTypes[d].tbid) {
             this.minTypes2[this.minTypes2.length] = this.minTypes[d]
           }
         }
@@ -283,14 +277,10 @@ export default {
           }
         }
       } else if (this.xname.id !== '' && this.lname.id === '' && this.dnames.did !== '') {
-        for (let f = 0; f < this.minTypes.length; f++) {
-          if (this.xname.id === this.minTypes[f].pbid) {
-            this.minTypes2[this.minTypes2.length] = this.minTypes[f]
-          }
-        }
+        this.minTypes2 = this.minTypes
       } else if (this.xname.id !== '' && this.lname.id !== '' && this.dnames.did !== '') {
         for (let g = 0; g < this.minTypes.length; g++) {
-          if (this.xname.id === this.minTypes[g].pbid && this.lname.id === this.minTypes[g].tbid) {
+          if (this.lname.id === this.minTypes[g].tbid) {
             this.minTypes2[this.minTypes2.length] = this.minTypes[g]
           }
         }

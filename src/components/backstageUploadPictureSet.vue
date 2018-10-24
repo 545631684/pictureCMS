@@ -101,67 +101,51 @@ export default {
     }
   },
   watch: {
-    projectImg: function (newQuestion, oldQuestion) {
-      console.log('projectImg')
-      this.minTypes2 = []
-      if (this.projectImg.length !== 0) {
-        let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
-        let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
-        if (this.typeImg.length !== 0) {
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        } else {
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (pid === this.minTypes[i].pbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        }
-      } else {
-        if (this.typeImg.length !== 0) {
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (getTypesID(this, this.typeImg) === this.minTypes[i].tbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        } else {
-          this.minTypes2 = this.minTypes
-        }
-      }
-    },
+//  projectImg: function (newQuestion, oldQuestion) {
+//    console.log('projectImg')
+//    this.minTypes2 = []
+//    if (this.projectImg.length !== 0) {
+//      let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
+//      let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
+//      if (this.typeImg.length !== 0) {
+//        for (let i = 0; i < this.minTypes.length; i++) {
+//        	if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
+//        	  this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+//        	}
+//        }
+//      } else {
+//        for (let i = 0; i < this.minTypes.length; i++) {
+//        	if (pid === this.minTypes[i].pbid) {
+//        	  this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+//        	}
+//        }
+//      }
+//    } else {
+//      if (this.typeImg.length !== 0) {
+//        for (let i = 0; i < this.minTypes.length; i++) {
+//          if (getTypesID(this, this.typeImg) === this.minTypes[i].tbid) {
+//            this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+//          }
+//        }
+//      } else {
+//        this.minTypes2 = this.minTypes
+//      }
+//    }
+//  },
     typeImg: function (newQuestion, oldQuestion) {
       console.log('typeImg')
       this.minTypes2 = []
+//    this.minTypeImg = ''
       let pid = this.projectImg.length !== 0 ? getProjectID(this, this.projectImg) : ''
       let tid = this.typeImg.length !== 0 ? getTypesID(this, this.typeImg) : ''
       if (this.typeImg.length !== 0) {
-        if (this.projectImg.length !== 0) {
-          // this.minTypeImg = ''
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        } else {
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (tid === this.minTypes[i].tbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        }
+	      for (let i = 0; i < this.minTypes.length; i++) {
+	        if (tid === this.minTypes[i].tbid) {
+	          this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+	        }
+	      }
       } else {
-        if (this.projectImg.length !== 0) {
-          for (let i = 0; i < this.minTypes.length; i++) {
-            if (getProjectID(this, this.projectImg) === this.minTypes[i].pbid) {
-              this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-            }
-          }
-        } else {
-          this.minTypes2 = this.minTypes
-        }
+      	this.minTypes2 = this.minTypes
       }
     },
     minTypeImg: function (newQuestion, oldQuestion) {
@@ -172,7 +156,7 @@ export default {
       if (this.minTypeImg.length !== 0) {
         for (let i = 0; i < this.minTypes.length; i++) {
           if (this.minTypeImg === this.minTypes[i].dname) {
-            this.projectImg = getProjectName(this, this.minTypes[i].pbid)
+//          this.projectImg = getProjectName(this, this.minTypes[i].pbid)
             this.typeImg = getTypesName(this, this.minTypes[i].tbid)
             pid = this.minTypes[i].pbid
             tid = this.minTypes[i].tbid
@@ -184,23 +168,15 @@ export default {
           }
         }
       } else if (this.minTypeImg.length === 0) {
-        if (this.projectImg.length !== 0) {
-          if (this.typeImg.length !== 0) {
-            for (let i = 0; i < this.minTypes.length; i++) {
-              if (pid === this.minTypes[i].pbid && tid === this.minTypes[i].tbid) {
-                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-              }
-            }
-          } else {
-            for (let i = 0; i < this.minTypes.length; i++) {
-              if (pid === this.minTypes[i].pbid) {
-                this.minTypes2[this.minTypes2.length] = this.minTypes[i]
-              }
-            }
-          }
-        } else {
-          this.minTypes2 = this.minTypes
-        }
+	      if (this.typeImg.length !== 0) {
+	        for (let i = 0; i < this.minTypes.length; i++) {
+	          if (tid === this.minTypes[i].tbid) {
+	            this.minTypes2[this.minTypes2.length] = this.minTypes[i]
+	          }
+	        }
+	      } else {
+	        this.minTypes2 = this.minTypes
+	      }
       }
     },
     minTypes2: function (newQuestion, oldQuestion) {

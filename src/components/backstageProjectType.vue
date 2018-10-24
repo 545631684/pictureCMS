@@ -185,7 +185,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .v-modal{ position: relative !important;}
   .titleType{height: 60px;line-height: 60px; text-align: left;}
   .titleType b{display: block;float: left; width: 50%; height: 60px; line-height: 60px; font-size: 20px;}
